@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                 @id @default(autoincrement())
+  username           String              @unique
+  password           String
+  fullname           String?
+  role               String              @default("TECHNICIAN")
+  maintenanceRecords MaintenanceRecord[]
+}
+
+model Car {
+  id                 Int                 @id @default(autoincrement())
+  licensePlate       String              @unique
+  brand              String
+  model              String
+  year               Int
+  mileage            Float
+  ownerName          String
+  ownerPhone         String?
+  driverLicenseClass String?
+  vin                String?             // Số khung
+  engineNumber       String?             // Số máy
+  color              String?             // Màu xe
+  maintenanceRecords MaintenanceRecord[]
+}
+
+model MaintenanceRecord {
+  id           Int      @id @default(autoincrement())
+  date         DateTime @default(now())
+  description  String
+  cost         Float?   
+  laborCost    Float?   @default(0) 
+  status       String   @default("PENDING") 
+  technicianId Int
+  technician   User     @relation(fields: [technicianId], references: [id])
+  carId        Int
+  car          Car      @relation(fields: [carId], references: [id])
+  
+  evidences        Evidence[]
+  maintenanceParts MaintenancePart[]
+  maintenanceTasks MaintenanceTask[]
+}
+
+model Evidence {
+  id        Int               @id @default(autoincrement())
+  url       String
+  type      String?           // e.g., "IMAGE", "PDF", "DOCUMENT"
+  recordId  Int
+  record    MaintenanceRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+}
+
+
+model MaintenanceTask {
+  id          Int               @id @default(autoincrement())
+  taskName    String
+  isCompleted Boolean           @default(false)
+  recordId    Int
+  record      MaintenanceRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+}
+
+model Part {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  category         String?
+  stockQuantity    Int               @default(0)
+  price            Float             @default(0)
+  maintenanceParts MaintenancePart[]
+}
+
+model MaintenancePart {
+  id                 Int               @id @default(autoincrement())
+  quanty             Int               @default(1)
+  price              Float             // Đơn giá tại thời điểm dùng
+  
+  recordId           Int
+  record             MaintenanceRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  
+  partId             Int
+  part               Part              @relation(fields: [partId], references: [id])
+}
+
+model Appointment {
+  id           Int      @id @default(autoincrement())
+  customerName String
+  phoneNumber  String
+  licensePlate String
+  serviceType  String
+  appointmentDate DateTime
+  status       String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  note         String?
+  cancelReason String?
+  createdAt    DateTime @default(now())
+}
+
+// Tài khoản khách hàng trên app mobile
+model Customer {
+  id                Int      @id @default(autoincrement())
+  phone             String   @unique          // SĐT là định danh đăng nhập
+  password          String                    // bcrypt hash
+  fullname          String?
+  licensePlate      String?                   // biển số chính (có thể cập nhật)
+  cancellationCount Int      @default(0)
+  isLocked          Boolean  @default(false)
+  pushToken         String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  notifications     Notification[]
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  customerId  Int
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
