@@ -14,10 +14,10 @@ import { colors, radius, spacing } from '@/theme';
 import { sendAiChatMessage, type ChatMessage } from '@/api/public';
 
 const SUGGESTIONS = [
-  '📅 Bao lâu thì cần bảo dưỡng định kỳ?',
-  '🔊 Xe kêu két két khi phanh là bị sao?',
-  '💨 Xe xả khói đen có nguy hiểm không?',
-  '🎨 Giá dịch vụ đồng sơn tại gara thế nào?',
+  'Bao lâu thì cần bảo dưỡng định kỳ?',
+  'Xe kêu két két khi phanh là bị sao?',
+  'Xe xả khói đen có nguy hiểm không?',
+  'Giá dịch vụ đồng sơn tại gara thế nào?',
 ];
 
 function renderParsedContent(text: string) {
@@ -57,7 +57,7 @@ export default function AiChatScreen() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'assistant',
-      content: 'Dạ, Gara Trường Phát xin chào anh/chị! 🤖\n\nEm là Trợ lý ảo AI được huấn luyện để chẩn đoán các sự cố xe ô tô và tư vấn các gói dịch vụ sửa chữa, bảo dưỡng tại Gara.\n\nAnh/chị đang gặp vấn đề gì với xế yêu của mình ạ?',
+      content: 'Dạ, Gara Trường Phát xin chào anh/chị!\n\nEm là Trợ lý ảo AI được huấn luyện để chẩn đoán các sự cố xe ô tô và tư vấn các gói dịch vụ sửa chữa, bảo dưỡng tại Gara.\n\nAnh/chị đang gặp vấn đề gì với xế yêu của mình ạ?',
     },
   ]);
   const [inputText, setInputText] = useState('');
@@ -96,7 +96,7 @@ export default function AiChatScreen() {
         ...prev,
         {
           role: 'assistant',
-          content: 'Dạ, hệ thống tư vấn đang gặp lỗi kết nối tạm thời. Anh/chị vui lòng thử lại sau hoặc gọi hotline **0909 123 456** để nhận tư vấn trực tiếp nhanh nhất ạ! 📞',
+          content: 'Dạ, hệ thống tư vấn đang gặp lỗi kết nối tạm thời. Anh/chị vui lòng thử lại sau hoặc gọi hotline **0909 123 456** để nhận tư vấn trực tiếp nhanh nhất ạ!',
         } as ChatMessage,
       ]);
     } finally {
@@ -113,7 +113,7 @@ export default function AiChatScreen() {
       {/* Bot Info Header */}
       <View style={styles.header}>
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>🤖</Text>
+          <Text style={styles.avatarText}>AI</Text>
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>Trợ lý AI Trường Phát</Text>
@@ -137,7 +137,7 @@ export default function AiChatScreen() {
             <View style={[styles.bubbleWrapper, isUser ? styles.bubbleWrapperUser : styles.bubbleWrapperBot]}>
               {!isUser && (
                 <View style={styles.msgAvatar}>
-                  <Text style={{ fontSize: 13 }}>🤖</Text>
+                  <Text style={{ fontSize: 10, color: colors.textMuted, fontWeight: '700' }}>AI</Text>
                 </View>
               )}
               <View style={[styles.bubble, isUser ? styles.bubbleUser : styles.bubbleBot]}>
@@ -156,7 +156,7 @@ export default function AiChatScreen() {
           loading ? (
             <View style={[styles.bubbleWrapper, styles.bubbleWrapperBot]}>
               <View style={styles.msgAvatar}>
-                <Text style={{ fontSize: 13 }}>🤖</Text>
+                <Text style={{ fontSize: 10, color: colors.textMuted, fontWeight: '700' }}>AI</Text>
               </View>
               <View style={[styles.bubble, styles.bubbleBot, styles.bubbleLoading]}>
                 <ActivityIndicator color={colors.accent} size="small" />
@@ -170,7 +170,7 @@ export default function AiChatScreen() {
       {/* Suggestions Box */}
       {messages.length === 1 && !loading && (
         <View style={styles.suggestionsContainer}>
-          <Text style={styles.suggestionsTitle}>💡 Câu hỏi thường gặp:</Text>
+          <Text style={styles.suggestionsTitle}>Câu hỏi thường gặp:</Text>
           <View style={styles.chipsWrapper}>
             {SUGGESTIONS.map((s, idx) => (
               <TouchableOpacity
@@ -202,7 +202,7 @@ export default function AiChatScreen() {
           disabled={!inputText.trim() || loading}
           activeOpacity={0.8}
         >
-          <Text style={styles.sendBtnText}>Gửi 🚀</Text>
+          <Text style={styles.sendBtnText}>Gửi</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(197, 168, 128, 0.08)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.border,
   },
-  avatarText: { fontSize: 18 },
+  avatarText: { fontSize: 12, color: colors.accent, fontWeight: '700' },
   headerTitle: {
     fontSize: 14,
     fontWeight: '700',
@@ -248,12 +248,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: 'rgba(16, 185, 129, 0.08)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: '#A7F3D0',
+    borderColor: 'rgba(16, 185, 129, 0.2)',
   },
   statusDot: {
     width: 6,
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#065F46',
+    color: '#10B981',
   },
   messageList: {
     padding: spacing.md,
@@ -286,11 +286,11 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.border,
     marginTop: 2,
   },
   bubble: {
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   bubbleUserText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.primaryFg,
     lineHeight: 20,
   },
   contentLineWrapper: {
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     fontSize: 13.5,
-    color: '#334155',
+    color: '#f1f5f9',
     lineHeight: 19.5,
     marginVertical: 2,
   },
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   chip: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.bg,
     borderColor: colors.border,
     borderWidth: 1,
     borderRadius: radius.md,
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.bg,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.md,
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   sendBtnText: {
-    color: '#FFF',
+    color: colors.primaryFg,
     fontSize: 13,
     fontWeight: '700',
   },

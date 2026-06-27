@@ -21,6 +21,57 @@ export default function MaintenancePage() {
   const [showPartDropdown, setShowPartDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  // AI Diagnostic states
+  const [aiDiagLoading, setAiDiagLoading] = useState(false);
+  const [aiDiagResult, setAiDiagResult] = useState(null);
+  const [showDiagModal, setShowDiagModal] = useState(false);
+
+  const handleAiDiagnose = async () => {
+    if (!formData.description.trim()) return;
+    setAiDiagLoading(true);
+    try {
+      const res = await fetch('/api/ai/diagnose', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ carId: formData.carId, symptoms: formData.description })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAiDiagResult(data);
+        setShowDiagModal(true);
+      } else {
+        toast.error(data.error || 'Lỗi chẩn đoán AI');
+      }
+    } catch (error) {
+      toast.error('Lỗi kết nối máy chủ chẩn đoán');
+    } finally {
+      setAiDiagLoading(false);
+    }
+  };
+
+  const handleApplyAiDiagnosis = () => {
+    if (!aiDiagResult) return;
+    
+    // Apply tasks
+    if (Array.isArray(aiDiagResult.tasks)) {
+      setTasks(prev => {
+        const unique = [...prev];
+        aiDiagResult.tasks.forEach(t => {
+          if (!unique.includes(t)) unique.push(t);
+        });
+        return unique;
+      });
+    }
+
+    // Apply labor cost
+    if (aiDiagResult.estimatedLaborCost) {
+      setFormData(prev => ({ ...prev, laborCost: String(aiDiagResult.estimatedLaborCost) }));
+    }
+
+    toast.success('Đã áp dụng quy trình công việc và tiền công ước tính của AI vào báo giá!');
+    setShowDiagModal(false);
+  };
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -190,6 +241,17 @@ export default function MaintenancePage() {
                     <div>
                     <label style={{fontWeight: 600, marginBottom: '0.5rem', display: 'block'}}>Mô tả tình trạng ban đầu (*)</label>
                     <textarea required rows="4" placeholder="Khách báo xe bị kêu ở gầm, cần thay dầu..." value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <button
+                        type="button"
+                        onClick={handleAiDiagnose}
+                        className="btn-secondary"
+                        disabled={aiDiagLoading || !formData.description.trim()}
+                        style={{ marginTop: 0, width: 'auto', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', padding: '0.4rem 0.8rem', background: '#e0edff', color: 'var(--primary)', border: '1px solid rgba(59, 130, 246, 0.2)' }}
+                      >
+                        {aiDiagLoading ? 'Đang phân tích...' : '✨ Chẩn đoán lỗi bằng AI'}
+                      </button>
+                    </div>
                     </div>
 
                     <div>
@@ -217,7 +279,7 @@ export default function MaintenancePage() {
                 <>
                     <h3 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Bước 2: Giao việc & Báo giá</h3>
                     
-                    <div style={{ border: '1px solid var(--border)', padding: '1rem', borderRadius: 'var(--radius)', background: 'var(--primary-light)', backgroundColor: '#f8fafc' }}>
+                    <div style={{ border: '1px solid var(--border)', padding: '1rem', borderRadius: 'var(--radius)', background: 'var(--surface)' }}>
                         <label style={{fontWeight: 600, marginBottom: '0.5rem', display: 'block', color: 'var(--primary)'}}>📍 Chỉ định Kỹ thuật viên (*)</label>
                         <select required value={formData.technicianId} onChange={e => setFormData({...formData, technicianId: e.target.value})}>
                             <option value="">-- Chọn kỹ thuật viên phụ trách --</option>
@@ -235,10 +297,10 @@ export default function MaintenancePage() {
                             <button type="button" onClick={handleAddTask} className="btn-primary" style={{marginTop: 0, width: 'auto', whiteSpace: 'nowrap', padding: '0 1.5rem'}}>Thêm mục</button>
                         </div>
                         {tasks.length > 0 && (
-                            <ul style={{ padding: '0.5rem', background: '#fff', borderRadius: '4px', border: '1px solid var(--border)', listStyle: 'none' }}>
+                            <ul style={{ padding: '0.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: 'var(--radius)', border: '1px solid var(--border)', listStyle: 'none' }}>
                                 {tasks.map((t, index) => (
                                     <li key={index} style={{ padding: '0.5rem', borderBottom: index < tasks.length - 1 ? '1px solid var(--border)' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span>✅ {t}</span>
+                                        <span style={{ color: 'var(--text)' }}>✅ {t}</span>
                                         <button type="button" onClick={() => handleRemoveTask(index)} style={{color: 'var(--error)', background: 'none', padding: 0}}>Xóa</button>
                                     </li>
                                 ))}
@@ -335,18 +397,53 @@ export default function MaintenancePage() {
                             <button type="button" onClick={handleAddPart} className="btn-primary" style={{marginTop: 0, width: 'auto', whiteSpace: 'nowrap', padding: '0 1.5rem'}}>Thêm</button>
                         </div>
 
+                        {aiDiagResult && aiDiagResult.parts && aiDiagResult.parts.length > 0 && (
+                            <div style={{ marginTop: '0.8rem', background: 'rgba(59, 130, 246, 0.05)', padding: '0.6rem 0.8rem', borderRadius: 'var(--radius)', border: '1px dashed rgba(59, 130, 246, 0.3)', fontSize: '0.8rem', marginBottom: '1rem' }}>
+                                <span style={{ fontWeight: 600, color: 'var(--primary)' }}>💡 Gợi ý phụ tùng từ AI:</span>{' '}
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+                                    {aiDiagResult.parts.map((pName, idx) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => {
+                                                setPartSearch(pName);
+                                                setShowPartDropdown(true);
+                                            }}
+                                            style={{
+                                                fontSize: '0.75rem',
+                                                padding: '2px 8px',
+                                                borderRadius: '12px',
+                                                background: 'rgba(59, 130, 246, 0.1)',
+                                                border: '1px solid rgba(59, 130, 246, 0.3)',
+                                                color: '#60a5fa',
+                                                cursor: 'pointer'
+                                            }}
+                                            title="Bấm để tìm nhanh trong kho"
+                                        >
+                                            🔍 {pName}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
                         {selectedParts.length > 0 && (
-                            <table style={{fontSize: '0.9rem', marginBottom: '1rem', background: '#fff', width: '100%'}}>
+                            <table style={{fontSize: '0.9rem', marginBottom: '1rem', width: '100%', borderCollapse: 'collapse'}}>
                                 <thead>
-                                    <tr style={{textAlign: 'left', borderBottom: '1px solid var(--border)'}}><th>Vật tư</th><th>SL</th><th>Thành tiền</th><th></th></tr>
+                                    <tr style={{textAlign: 'left', borderBottom: '1px solid var(--border)'}}>
+                                        <th style={{padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.8rem'}}>Vật tư</th>
+                                        <th style={{padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.8rem'}}>SL</th>
+                                        <th style={{padding: '0.5rem', color: 'var(--text-muted)', fontSize: '0.8rem'}}>Thành tiền</th>
+                                        <th style={{padding: '0.5rem'}}></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {selectedParts.map(p => (
-                                        <tr key={p.partId}>
-                                            <td>{p.name}</td>
-                                            <td>{p.quantity}</td>
-                                            <td>{(p.price * p.quantity).toLocaleString()}</td>
-                                            <td style={{textAlign: 'right'}}><button type="button" onClick={() => handleRemovePart(p.partId)} style={{color: 'var(--error)', background: 'none', padding: 0}}>Xóa</button></td>
+                                        <tr key={p.partId} style={{borderBottom: '1px solid var(--border)'}}>
+                                            <td style={{padding: '0.5rem', color: 'var(--text)'}}>{p.name}</td>
+                                            <td style={{padding: '0.5rem', color: 'var(--text)'}}>{p.quantity}</td>
+                                            <td style={{padding: '0.5rem', color: 'var(--text)'}}>{(p.price * p.quantity).toLocaleString()}</td>
+                                            <td style={{padding: '0.5rem', textAlign: 'right'}}><button type="button" onClick={() => handleRemovePart(p.partId)} style={{color: 'var(--error)', background: 'none', padding: 0}}>Xóa</button></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -401,6 +498,114 @@ export default function MaintenancePage() {
             </div>
         )}
       </div>
+
+      {showDiagModal && aiDiagResult && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)', display: 'grid', placeItems: 'center',
+          zIndex: 9999, padding: '2rem'
+        }}>
+          <div className="card" style={{
+            maxWidth: '650px', width: '100%', background: 'var(--surface)',
+            maxHeight: '85vh', overflowY: 'auto', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+            borderLeft: `5px solid ${aiDiagResult.priority === 'URGENT' ? '#ef4444' : '#f59e0b'}`,
+            borderTop: '1px solid var(--border)',
+            borderRight: '1px solid var(--border)',
+            borderBottom: '1px solid var(--border)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.8rem' }}>
+              <h3 style={{ margin: 0, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                🩺 Kết quả Chẩn đoán lỗi AI
+              </h3>
+              <span style={{
+                fontSize: '0.75rem', fontWeight: 'bold', padding: '4px 10px', borderRadius: '12px',
+                background: aiDiagResult.priority === 'URGENT' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                color: aiDiagResult.priority === 'URGENT' ? '#ef4444' : '#f59e0b'
+              }}>
+                {aiDiagResult.priority === 'URGENT' ? 'Khẩn cấp' : aiDiagResult.priority === 'MEDIUM' ? 'Trung bình' : 'Thấp'}
+              </span>
+            </div>
+
+            {/* Body */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', flex: 1, overflowY: 'auto' }}>
+              {/* Causes */}
+              <div>
+                <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  🔍 Nguyên nhân có thể xảy ra:
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                  {aiDiagResult.causes?.map((c, idx) => (
+                    <div key={idx} style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '0.8rem', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, fontSize: '0.85rem', marginBottom: '4px' }}>
+                        <span style={{ color: 'var(--primary)' }}>{c.name}</span>
+                        <span style={{ color: '#ef4444' }}>Tỷ lệ: {c.probability}%</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                        {c.explanation}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tasks */}
+              <div>
+                <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
+                  🛠️ Quy trình kỹ thuật đề xuất:
+                </div>
+                <ul style={{ paddingLeft: '1.2rem', margin: 0, fontSize: '0.85rem', lineHeight: '1.6', color: 'var(--text)' }}>
+                  {aiDiagResult.tasks?.map((t, idx) => <li key={idx} style={{ marginBottom: '2px' }}>{t}</li>)}
+                </ul>
+              </div>
+
+              {/* Parts */}
+              {aiDiagResult.parts && aiDiagResult.parts.length > 0 && (
+                <div>
+                  <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
+                    ⚙️ Vật tư/phụ tùng khuyến nghị kiểm tra:
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {aiDiagResult.parts.map((p, idx) => (
+                      <span key={idx} style={{ fontSize: '0.75rem', background: 'rgba(255, 255, 255, 0.05)', color: 'var(--text)', padding: '4px 10px', borderRadius: '4px', border: '1px solid var(--border)' }}>
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Cost */}
+              <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '0.8rem 1rem', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontWeight: 600, color: '#10b981', fontSize: '0.9rem' }}>Ước lượng tiền công đề xuất:</span>
+                <span style={{ fontWeight: 700, color: '#10b981', fontSize: '1.1rem' }}>
+                  {aiDiagResult.estimatedLaborCost?.toLocaleString('vi-VN')}đ
+                </span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1rem', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                onClick={() => setShowDiagModal(false)}
+                className="btn-secondary"
+                style={{ width: 'auto', marginTop: 0, padding: '0.5rem 1.5rem', background: '#f1f5f9', color: '#475569' }}
+              >
+                Bỏ qua
+              </button>
+              <button
+                type="button"
+                onClick={handleApplyAiDiagnosis}
+                className="btn-primary"
+                style={{ width: 'auto', marginTop: 0, padding: '0.5rem 1.5rem' }}
+              >
+                Áp dụng báo giá
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AppLayout>
   );
 }

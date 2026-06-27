@@ -82,6 +82,11 @@ export default function ReportsPage() {
   });
   const [statusFilter, setStatusFilter] = useState('ALL');
 
+  // Tab & AI forecast state
+  const [activeTab, setActiveTab] = useState('analytics');
+  const [forecastData, setForecastData] = useState(null);
+  const [forecastLoading, setForecastLoading] = useState(true);
+
   const printRef = useRef();
   const handlePrint = useReactToPrint({ contentRef: printRef });
 
@@ -103,7 +108,19 @@ export default function ReportsPage() {
     }
   };
 
-  useEffect(() => { fetchReport(filter); /* eslint-disable-next-line */ }, []);
+  useEffect(() => {
+    fetchReport(filter);
+    
+    // Fetch AI forecast
+    fetch('/api/ai/forecast-seasonal')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setForecastData(data);
+      })
+      .catch(err => console.error("AI forecast fetch error:", err))
+      .finally(() => setForecastLoading(false));
+    /* eslint-disable-next-line */
+  }, []);
 
   const applyPreset = (key) => {
     const r = getPresetRange(key);
@@ -203,7 +220,36 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      {/* Filter */}
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
+        <button 
+          onClick={() => setActiveTab('analytics')}
+          style={{
+            background: 'none', border: 'none', 
+            borderBottom: activeTab === 'analytics' ? '3px solid var(--primary)' : '3px solid transparent',
+            color: activeTab === 'analytics' ? 'var(--primary)' : 'var(--secondary)',
+            fontWeight: 600, padding: '0.5rem 1rem', cursor: 'pointer', fontSize: '1rem'
+          }}
+        >
+          📊 Thống kê & Phân tích
+        </button>
+        <button 
+          onClick={() => setActiveTab('ai_forecast')}
+          style={{
+            background: 'none', border: 'none', 
+            borderBottom: activeTab === 'ai_forecast' ? '3px solid var(--primary)' : '3px solid transparent',
+            color: activeTab === 'ai_forecast' ? 'var(--primary)' : 'var(--secondary)',
+            fontWeight: 600, padding: '0.5rem 1rem', cursor: 'pointer', fontSize: '1rem',
+            display: 'flex', alignItems: 'center', gap: '6px'
+          }}
+        >
+          🔮 Dự báo & Kế hoạch AI
+        </button>
+      </div>
+
+      {activeTab === 'analytics' ? (
+        <>
+          {/* Filter */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
           {PRESETS.map(p => (
@@ -215,7 +261,7 @@ export default function ReportsPage() {
                 padding: '0.4rem 0.9rem',
                 borderRadius: '20px',
                 border: '1px solid var(--border)',
-                background: filter.presetKey === p.key ? 'var(--primary)' : 'white',
+                background: filter.presetKey === p.key ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)',
                 color: filter.presetKey === p.key ? 'white' : 'var(--text)',
                 cursor: 'pointer',
                 fontSize: '0.85rem',
@@ -292,7 +338,7 @@ export default function ReportsPage() {
               <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Doanh thu theo {reportData.period?.bucket === 'month' ? 'tháng' : 'ngày'} — kỳ này vs kỳ trước</h3>
               <div style={{ height: '320px' }}>
                 {lineData.length ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <LineChart data={lineData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="idx" fontSize={11} />
@@ -310,7 +356,7 @@ export default function ReportsPage() {
               <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Cơ cấu doanh thu</h3>
               <div style={{ height: '320px' }}>
                 {compositionData.length ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <PieChart>
                       <Pie data={compositionData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
                         {compositionData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
@@ -329,7 +375,7 @@ export default function ReportsPage() {
               <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Doanh thu theo tháng</h3>
               <div style={{ height: '300px' }}>
                 {reportData.monthlyRevenue?.length ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <BarChart data={reportData.monthlyRevenue}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="name" fontSize={11} />
@@ -370,7 +416,7 @@ export default function ReportsPage() {
               <h3 style={{ marginBottom: '1rem', fontSize: '1.05rem' }}>Phân bố trạng thái</h3>
               <div style={{ height: '260px' }}>
                 {statusPieData.length ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <PieChart>
                       <Pie data={statusPieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80}>
                         {statusPieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
@@ -386,7 +432,7 @@ export default function ReportsPage() {
               <h3 style={{ marginBottom: '1rem', fontSize: '1.05rem' }}>Đặt lịch theo loại</h3>
               <div style={{ height: '260px' }}>
                 {serviceTypeChart.length ? (
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                     <BarChart data={serviceTypeChart}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="name" fontSize={11} />
@@ -407,7 +453,8 @@ export default function ReportsPage() {
                   {reportData.topParts.map((p, i) => (
                     <div key={i} style={{
                       display: 'flex', justifyContent: 'space-between',
-                      padding: '0.5rem 0.7rem', background: '#f8fafc', borderRadius: '8px',
+                      padding: '0.5rem 0.7rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '8px',
+                      border: '1px solid var(--border)',
                       fontSize: '0.85rem'
                     }}>
                       <span style={{ fontWeight: 500 }}>{p.name}</span>
@@ -516,6 +563,120 @@ export default function ReportsPage() {
               </table>
             </div>
           </div>
+        </>
+      )}
+      </>
+      ) : (
+        <>
+          {forecastLoading ? (
+            <div style={{ padding: '5rem', textAlign: 'center' }}>Đang chạy mô hình dự báo AI...</div>
+          ) : !forecastData ? (
+            <div style={{ padding: '5rem', textAlign: 'center' }}>Không thể tải dữ liệu dự báo AI. Vui lòng kiểm tra lại cấu hình API.</div>
+          ) : (
+            <div>
+              {/* AI KPI cards */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '1.5rem', marginBottom: '2rem'
+              }}>
+                <div className="modern-stat-card" style={{ borderLeft: '4px solid #3b82f6' }}>
+                  <div className="stat-info">
+                    <div className="stat-title">Dự báo Doanh thu Mùa Tới ({forecastData.nextSeasonName})</div>
+                    <div className="stat-value" style={{ fontSize: '1.3rem' }}>
+                      {formatVND(forecastData.forecast.predictedRevenueMin)} - {formatVND(forecastData.forecast.predictedRevenueMax)}
+                    </div>
+                    <span className="stat-trend" style={{ color: 'var(--primary)' }}>Kỳ vọng theo xu hướng thị trường</span>
+                  </div>
+                  <div className="stat-icon" style={{ background: '#e0edff', color: '#3b82f6' }}><Coins size={24} /></div>
+                </div>
+
+                <div className="modern-stat-card" style={{ borderLeft: '4px solid #10b981' }}>
+                  <div className="stat-info">
+                    <div className="stat-title">Dự báo Lượng xe vào xưởng</div>
+                    <div className="stat-value" style={{ fontSize: '1.3rem' }}>
+                      {forecastData.forecast.predictedVehiclesMin} - {forecastData.forecast.predictedVehiclesMax} lượt xe
+                    </div>
+                    <span className="stat-trend" style={{ color: '#10b981' }}>Dự tính theo chu kỳ mùa</span>
+                  </div>
+                  <div className="stat-icon" style={{ background: '#d1fae5', color: '#10b981' }}><Users size={24} /></div>
+                </div>
+
+                <div className="modern-stat-card" style={{ borderLeft: '4px solid #f59e0b' }}>
+                  <div className="stat-info">
+                    <div className="stat-title">Đề xuất nhân lực</div>
+                    <div className="stat-value" style={{ fontSize: '0.85rem', fontWeight: 'normal', color: '#475569', marginTop: '4px', lineHeight: '1.4' }}>
+                      {forecastData.forecast.staffingRecommendation}
+                    </div>
+                  </div>
+                  <div className="stat-icon" style={{ background: '#fef3c7', color: '#f59e0b' }}><TrendingUp size={24} /></div>
+                </div>
+              </div>
+
+              {/* Row 2: Seasonal Chart & Strategic Advice */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div className="card">
+                  <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>So sánh doanh thu trung bình các mùa vs Dự báo tiếp theo</h3>
+                  <div style={{ height: '320px' }}>
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                      <BarChart
+                        data={[
+                          { name: 'Mùa Xuân', 'Doanh thu': forecastData.historical.Spring.revenue },
+                          { name: 'Mùa Hè', 'Doanh thu': forecastData.historical.Summer.revenue },
+                          { name: 'Mùa Thu', 'Doanh thu': forecastData.historical.Autumn.revenue },
+                          { name: 'Mùa Đông', 'Doanh thu': forecastData.historical.Winter.revenue },
+                          { name: `Dự báo (${forecastData.nextSeasonName.split(' ')[0]})`, 'Doanh thu': (forecastData.forecast.predictedRevenueMin + forecastData.forecast.predictedRevenueMax) / 2 }
+                        ]}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                        <XAxis dataKey="name" fontSize={11} />
+                        <YAxis fontSize={11} />
+                        <Tooltip formatter={(v) => formatVND(v)} />
+                        <Legend />
+                        <Bar dataKey="Doanh thu" fill="#3b82f6" radius={[4, 4, 0, 0]}>
+                          <Cell fill="#93c5fd" />
+                          <Cell fill="#60a5fa" />
+                          <Cell fill="#3b82f6" />
+                          <Cell fill="#2563eb" />
+                          <Cell fill="#f59e0b" />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem', color: 'var(--primary)' }}>💡 Tư vấn chiến lược kinh doanh AI</h3>
+                  <div style={{ background: '#f8fafc', padding: '1.2rem', borderRadius: '8px', border: '1px solid var(--border)', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    <div style={{ fontStyle: 'italic', fontSize: '0.9rem', color: '#334155', lineHeight: '1.6' }}>
+                      &ldquo;{forecastData.forecast.strategicAdvice}&rdquo;
+                    </div>
+                    <div style={{ marginTop: 'auto', fontSize: '0.8rem', color: 'var(--secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>⚡ Phân tích tạo bởi AI Gara Trường Phát</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 3: Spare parts preparation plan */}
+              <div className="card">
+                <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>📦 Kế hoạch chuẩn bị phụ tùng & linh kiện nhập kho</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                  {forecastData.forecast.partsToStock.map((part, idx) => (
+                    <div key={idx} style={{ padding: '1rem', background: '#f8fafc', borderRadius: '6px', border: '1px solid var(--border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span style={{ fontWeight: 600, color: 'var(--primary)', fontSize: '0.95rem' }}>{idx + 1}. {part.name}</span>
+                        <span style={{ fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '12px', fontWeight: 600 }}>Cần tích trữ</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '0.85rem', color: '#475569', lineHeight: '1.5' }}>
+                        {part.reason}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 

@@ -258,7 +258,7 @@ export default function Dashboard() {
             <div className="chart-card">
               <h3 style={{ marginBottom: '1.5rem', fontWeight: 600 }}>Thống kê dịch vụ theo tháng</h3>
               <div style={{ height: '300px', width: '100%' }}>
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                   <BarChart data={stats.monthlyStats || []} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} dy={10} />

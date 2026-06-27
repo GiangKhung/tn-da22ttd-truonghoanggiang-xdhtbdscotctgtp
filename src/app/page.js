@@ -17,7 +17,8 @@ import {
   Globe,
   Share2,
   MessageCircle,
-  Send
+  Send,
+  Users
 } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 import './landing.css';
@@ -44,7 +45,8 @@ export default function LandingPage() {
   const [aiMessages, setAiMessages] = useState([
     {
       role: 'assistant',
-      content: 'Xin chào! Em là Trợ lý ảo Gara Trường Phát. Em có thể hỗ trợ chẩn đoán lỗi xe, tìm hiểu gói dịch vụ hoặc hướng dẫn anh/chị đặt lịch bảo dưỡng gầm máy, điện lạnh, đồng sơn... Anh/chị đang gặp vấn đề gì với xế yêu của mình ạ?'
+      content: 'Xin chào! Em là Trợ lý ảo Gara Trường Phát. Em có thể hỗ trợ chẩn đoán lỗi xe, tìm hiểu gói dịch vụ hoặc hướng dẫn anh/chị đặt lịch bảo dưỡng gầm máy, điện lạnh, đồng sơn... Anh/chị đang gặp vấn đề gì với xế yêu của mình ạ?',
+      time: 'Vừa xong'
     }
   ]);
 
@@ -60,8 +62,10 @@ export default function LandingPage() {
     const text = textToSend || aiInput;
     if (!text || !text.trim()) return;
 
+    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
     // Thêm tin nhắn của User
-    const userMsg = { role: 'user', content: text };
+    const userMsg = { role: 'user', content: text, time: currentTime };
     const updatedMsgs = [...aiMessages, userMsg];
     setAiMessages(updatedMsgs);
     setAiInput('');
@@ -75,13 +79,15 @@ export default function LandingPage() {
       });
 
       const data = await response.json();
+      const replyTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       if (response.ok && data.reply) {
-        setAiMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+        setAiMessages(prev => [...prev, { role: 'assistant', content: data.reply, time: replyTime }]);
       } else {
-        setAiMessages(prev => [...prev, { role: 'assistant', content: 'Dạ, hệ thống kết nối AI đang bận. Anh/chị có thể liên hệ hotline 0909 123 456 hoặc đặt lịch hẹn trực tiếp nhé!' }]);
+        setAiMessages(prev => [...prev, { role: 'assistant', content: 'Dạ, hệ thống kết nối AI đang bận. Anh/chị có thể liên hệ hotline 0909 123 456 hoặc đặt lịch hẹn trực tiếp nhé!', time: replyTime }]);
       }
     } catch (error) {
-      setAiMessages(prev => [...prev, { role: 'assistant', content: 'Dạ, không thể kết nối đến máy chủ AI. Xin quý khách vui lòng thử lại sau.' }]);
+      const errTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setAiMessages(prev => [...prev, { role: 'assistant', content: 'Dạ, không thể kết nối đến máy chủ AI. Xin quý khách vui lòng thử lại sau.', time: errTime }]);
     } finally {
       setAiLoading(false);
     }
@@ -264,16 +270,87 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section id="home" className="hero">
-        <div className="hero-content">
-          <h1>Đẳng Cấp Bảo Dưỡng <br /> Xứng Tầm Xế Yêu</h1>
-          <p>
-            Gara Trường Phát mang đến giải pháp chăm sóc ô tô toàn diện {"\n"}
-            với công nghệ hiện đại, đội ngũ kỹ thuật viên tay nghề cao {"\n"}
-            và phụ tùng chính hãng.
-          </p>
-          <div className="cta-group">
-            <a href="#booking" className="btn-lp btn-lp-primary">Đặt lịch ngay</a>
-            <a href="#services" className="btn-lp btn-lp-outline">Khám phá dịch vụ</a>
+        <div className="hero-container-wrapper">
+          <div className="hero-content">
+            <h1>Đẳng Cấp Bảo Dưỡng <br /> Xứng Tầm Xế Yêu</h1>
+            <p>
+              Gara Trường Phát mang đến giải pháp chăm sóc ô tô toàn diện {"\n"}
+              với công nghệ hiện đại, đội ngũ kỹ thuật viên tay nghề cao {"\n"}
+              và phụ tùng chính hãng.
+            </p>
+            <div className="cta-group">
+              <a href="#booking" className="btn-lp btn-lp-primary">Đặt lịch ngay</a>
+              <a href="#services" className="btn-lp btn-lp-outline">Khám phá dịch vụ</a>
+            </div>
+          </div>
+
+          <div className="hero-orbit-stats">
+            <div className="orbit-scene">
+              {/* Outer Orbit Ring */}
+              <div className="orbit-ring orbit-ring-outer">
+                <div className="orbit-dot dot-1"></div>
+              </div>
+              
+              {/* Middle Orbit Ring */}
+              <div className="orbit-ring orbit-ring-middle">
+                <div className="orbit-dot dot-2"></div>
+              </div>
+
+              {/* Inner Orbit Ring */}
+              <div className="orbit-ring orbit-ring-inner">
+                <div className="orbit-dot dot-3"></div>
+              </div>
+
+              {/* Central avatar */}
+              <div className="orbit-center">
+                <img 
+                  src="/hero_orbit_car.png" 
+                  alt="Gara Trường Phát Premium Car" 
+                  className="orbit-center-img"
+                />
+                <div className="orbit-center-glow"></div>
+              </div>
+
+              {/* Floating badges */}
+              {/* Badge 1: Top */}
+              <div className="float-badge badge-top">
+                <div className="badge-icon-box bg-blue">
+                  <Wrench size={18} className="text-blue" />
+                </div>
+                <div className="badge-text-box">
+                  <span className="badge-label">Kỹ thuật viên</span>
+                  <span className="badge-value">30+ Chuyên gia</span>
+                </div>
+              </div>
+
+              {/* Badge 2: Right */}
+              <div className="float-badge badge-right">
+                <div className="badge-icon-box bg-green">
+                  <ShieldCheck size={18} className="text-green" />
+                </div>
+                <div className="badge-text-box">
+                  <span className="badge-label">Khách hàng tin chọn</span>
+                  <span className="badge-value">10.000+</span>
+                </div>
+              </div>
+
+              {/* Badge 3: Left */}
+              <div className="float-badge badge-left">
+                <div className="badge-icon-box bg-cyan">
+                  <Zap size={18} className="text-cyan" />
+                </div>
+                <div className="badge-text-box">
+                  <span className="badge-label">Phụ tùng</span>
+                  <span className="badge-value">100% Chính hãng</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom stats description */}
+            <div className="orbit-bottom-text">
+              <Users size={16} className="text-muted" />
+              <span>Được hơn <strong>10.000+</strong> chủ xe tin dùng mỗi năm</span>
+            </div>
           </div>
         </div>
       </section>
@@ -359,7 +436,7 @@ export default function LandingPage() {
                 ))}
               </div>
               <p className="testimonial-date">{testimonial.date} 04:40 PM • 1 Lượt xem</p>
-              <p className="testimonial-content">"{testimonial.content}"</p>
+              <p className="testimonial-content">&ldquo;{testimonial.content}&rdquo;</p>
               <h4 className="testimonial-author">KHÁCH HÀNG {testimonial.name} ĐÁNH GIÁ TRÊN GG MAPS...</h4>
             </div>
           ))}
@@ -839,7 +916,7 @@ export default function LandingPage() {
                   )}
                 </div>
                 <span className="ai-msg-time">
-                  {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {msg.time || 'Vừa xong'}
                 </span>
               </div>
             ))}

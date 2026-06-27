@@ -20,6 +20,7 @@ async function request<T>(path: string, init: RequestInit = {}, withAuth = false
   const url = `${API_BASE_URL}${path}`;
   const headers: Record<string, string> = {
     Accept: 'application/json',
+    'ngrok-skip-browser-warning': 'true',
     ...(init.body ? { 'Content-Type': 'application/json' } : {}),
     ...((init.headers as Record<string, string>) || {}),
   };

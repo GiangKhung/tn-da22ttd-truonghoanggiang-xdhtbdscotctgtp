@@ -133,16 +133,23 @@ export default function CarsPage() {
                 htmlFor="ai-scan-input" 
                 className="btn-primary" 
                 style={{ 
-                  background: 'var(--success)', 
+                  background: 'transparent', 
+                  border: '1px solid var(--primary-glow)',
+                  color: 'var(--primary-glow)',
                   cursor: isScanning ? 'not-allowed' : 'pointer',
                   opacity: isScanning ? 0.7 : 1,
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  padding: '8px 16px'
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  boxShadow: 'none',
+                  transition: 'all 0.2s'
                 }}
               >
-                {isScanning ? 'Đang quét...' : '✨ Quét Cà Vẹt bằng AI'}
+                {isScanning ? 'Đang quét...' : 'Quét Cà Vẹt bằng AI'}
               </label>
             </div>
           </div>

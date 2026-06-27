@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
-import { Alert, FlatList, RefreshControl, StyleSheet, Text, View, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, FlatList, RefreshControl, StyleSheet, Text, View, Modal, TextInput, TouchableOpacity, Platform } from 'react-native';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { AppointmentCard } from '@/components/AppointmentCard';
 import { EmptyState } from '@/components/EmptyState';
 import { cancelAppointment, getMyAppointments } from '@/api/public';
 import { useCustomer } from '@/context/AuthContext';
-import { colors, spacing } from '@/theme';
+import { colors, spacing, radius } from '@/theme';
 
 export default function MyAppointmentsScreen() {
   const customer = useCustomer();
@@ -43,7 +43,6 @@ export default function MyAppointmentsScreen() {
   if (!enabled) {
     return (
       <View style={styles.notice}>
-        <Text style={styles.noticeIcon}>🚗</Text>
         <Text style={styles.noticeTitle}>Yêu cầu đăng nhập</Text>
         <Text style={styles.noticeText}>
           Vui lòng đăng nhập để tra cứu lịch hẹn của bạn.
@@ -155,7 +154,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     gap: spacing.md,
   },
-  noticeIcon: { fontSize: 52 },
   noticeTitle: {
     fontSize: 18,
     fontWeight: '700',
@@ -183,14 +181,23 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
   },
   modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
     padding: spacing.xl,
     gap: spacing.md,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 5px 8px rgba(0, 0, 0, 0.15)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        elevation: 5,
+      },
+    }),
   },
   modalTitle: {
     fontSize: 18,
@@ -204,13 +211,13 @@ const styles = StyleSheet.create({
   modalInput: {
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: radius.md,
     padding: spacing.md,
     fontSize: 15,
     color: colors.text,
     minHeight: 80,
     textAlignVertical: 'top',
-    backgroundColor: '#fafafa',
+    backgroundColor: colors.bg,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -221,16 +228,16 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: spacing.md,
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: radius.md,
   },
   modalBtnCancel: {
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   modalBtnConfirm: {
-    backgroundColor: colors.danger || '#ef4444',
+    backgroundColor: colors.danger,
   },
   modalBtnTextCancel: {
-    color: '#475569',
+    color: colors.text,
     fontWeight: '700',
     fontSize: 14,
   },

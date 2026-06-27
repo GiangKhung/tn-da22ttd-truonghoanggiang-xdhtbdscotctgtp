@@ -80,19 +80,19 @@ export default function MaintenanceDetail() {
 
   return (
     <AppLayout>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface)', padding: '1.5rem', borderRadius: 'var(--radius)', marginBottom: '2rem', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
         <div>
             <span style={{ cursor: 'pointer', color: 'var(--secondary)', display: 'inline-flex', alignItems: 'center', marginBottom: '0.5rem'}} onClick={() => router.push('/dashboard')}>← Quay lại Dashboard</span> 
-            <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>Lệnh sửa chữa: {record.car.licensePlate}</h1>
-            <p style={{ margin: '4px 0 0 0', color: '#64748b' }}>Kỹ thuật viên phụ trách: <strong>{record.technician?.fullname}</strong></p>
+            <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text)' }}>Lệnh sửa chữa: {record.car.licensePlate}</h1>
+            <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)' }}>Kỹ thuật viên phụ trách: <strong style={{ color: 'var(--primary)' }}>{record.technician?.fullname}</strong></p>
         </div>
         
         <div style={{ textAlign: 'right' }}>
             <span style={{ 
                 padding: '0.5rem 1rem', 
                 borderRadius: '20px', 
-                background: record.status === 'COMPLETED' ? '#ecfdf5' : '#eff6ff', 
-                color: record.status === 'COMPLETED' ? '#10b981' : '#3b82f6',
+                background: record.status === 'COMPLETED' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.15)', 
+                color: record.status === 'COMPLETED' ? '#10b981' : '#60a5fa',
                 fontWeight: 'bold',
                 fontSize: '0.9rem'
             }}>
@@ -110,7 +110,7 @@ export default function MaintenanceDetail() {
                 <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--primary)' }}>{progressPercentage}%</span>
             </div>
             
-            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', marginBottom: '3rem', position: 'relative' }}>
+            <div style={{ height: '8px', background: 'rgba(255, 255, 255, 0.05)', borderRadius: '4px', marginBottom: '3rem', position: 'relative' }}>
                 <div style={{ width: `${progressPercentage}%`, height: '100%', background: 'linear-gradient(90deg, #3b82f6, #10b981)', borderRadius: '4px', transition: 'width 0.5s ease' }}></div>
             </div>
 
@@ -135,7 +135,7 @@ export default function MaintenanceDetail() {
                                     top: '35px', 
                                     bottom: '-25px', 
                                     width: '2px', 
-                                    background: isCompleted ? '#10b981' : '#e2e8f0' 
+                                    background: isCompleted ? '#10b981' : 'rgba(255, 255, 255, 0.1)' 
                                 }}></div>
                             )}
 
@@ -144,23 +144,23 @@ export default function MaintenanceDetail() {
                                 width: '32px', 
                                 height: '32px', 
                                 borderRadius: '50%', 
-                                background: isCompleted ? '#10b981' : isActive ? '#3b82f6' : '#fff',
-                                border: `2px solid ${isCompleted ? '#10b981' : isActive ? '#3b82f6' : '#e2e8f0'}`,
+                                background: isCompleted ? '#10b981' : isActive ? '#3b82f6' : 'var(--surface)',
+                                border: `2px solid ${isCompleted ? '#10b981' : isActive ? '#3b82f6' : 'var(--border)'}`,
                                 display: 'grid', 
                                 placeItems: 'center',
-                                color: isCompleted || isActive ? '#fff' : '#94a3b8',
+                                color: isCompleted || isActive ? '#fff' : 'var(--text-muted)',
                                 zIndex: 1,
                                 fontWeight: 'bold'
                             }}>
                                 {isCompleted ? '✓' : index + 1}
                             </div>
 
-                            <div style={{ flex: 1, background: isActive ? '#f8fafc' : 'transparent', padding: isActive ? '1rem' : '0.2rem 0', borderRadius: '12px', border: isActive ? '1px solid #e2e8f0' : 'none' }}>
+                            <div style={{ flex: 1, background: isActive ? 'rgba(255, 255, 255, 0.02)' : 'transparent', padding: isActive ? '1rem' : '0.2rem 0', borderRadius: '12px', border: isActive ? '1px solid var(--border)' : 'none' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span style={{ 
                                         fontSize: '1.1rem', 
                                         fontWeight: isActive ? '700' : '500',
-                                        color: isCompleted ? '#94a3b8' : '#1e293b',
+                                        color: isCompleted ? 'var(--text-muted)' : isActive ? 'var(--text)' : 'rgba(255, 255, 255, 0.3)',
                                         textDecoration: isCompleted ? 'line-through' : 'none'
                                     }}>
                                         {task.taskName}
@@ -189,15 +189,15 @@ export default function MaintenanceDetail() {
                     <div style={{ 
                         marginTop: '2rem', 
                         padding: '2rem', 
-                        background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)', 
+                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%)', 
                         borderRadius: '16px', 
                         border: '2px dashed #10b981', 
                         textAlign: 'center',
                         animation: 'pulse 2s infinite'
                     }}>
                         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
-                        <h3 style={{ color: '#065f46', marginBottom: '0.5rem' }}>Tuyệt vời! Bạn đã xong việc.</h3>
-                        <p style={{ color: '#047857', marginBottom: '1.5rem' }}>Mọi hạng mục đã hoàn tất. Vui lòng gửi thông báo cho quản trị viên để làm thủ tục bàn giao xe.</p>
+                        <h3 style={{ color: 'var(--success)', marginBottom: '0.5rem' }}>Tuyệt vời! Bạn đã xong việc.</h3>
+                        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Mọi hạng mục đã hoàn tất. Vui lòng gửi thông báo cho quản trị viên để làm thủ tục bàn giao xe.</p>
                         <button 
                             className="btn-primary" 
                             onClick={() => handleStatusChange('COMPLETED')}
@@ -233,7 +233,7 @@ export default function MaintenanceDetail() {
                         </thead>
                         <tbody>
                             {record.maintenanceParts.map(p => (
-                                <tr key={p.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                                <tr key={p.id} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{ padding: '0.5rem 0' }}>{p.part?.name}</td>
                                     <td style={{ padding: '0.5rem 0' }}>{p.quanty}</td>
                                 </tr>

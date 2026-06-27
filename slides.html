@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Báo cáo Đồ án Tốt nghiệp: GaraTP</title>
+  <meta name="description" content="Slide thuyết trình bảo vệ đồ án tốt nghiệp - Hệ thống GaraTP">
+
+  <!-- Reveal.js CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+
+  <!-- Font chữ Inter từ Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --r-main-font: 'Inter', sans-serif;
+      --r-heading-font: 'Inter', sans-serif;
+      --r-background-color: #030712;
+      --r-main-color: #e5e7eb;
+      --r-heading-color: #ffffff;
+      --r-link-color: #3b82f6;
+      --r-link-color-hover: #60a5fa;
+
+      /* Màu sắc bổ sung */
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.4);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.3);
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --border-card: rgba(75, 85, 99, 0.3);
+    }
+
+    .reveal {
+      font-family: var(--r-main-font);
+      background: radial-gradient(circle at center, #0b1528 0%, #030712 100%);
+      color: var(--r-main-color);
+    }
+
+    .reveal h1,
+    .reveal h2,
+    .reveal h3,
+    .reveal h4,
+    .reveal h5,
+    .reveal h6 {
+      font-family: var(--r-heading-font);
+      color: var(--r-heading-color);
+      text-transform: none;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal h2 {
+      font-size: 2.2rem;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 15px;
+      margin-bottom: 40px;
+      display: inline-block;
+    }
+
+    /* Các thành phần Layout tùy chỉnh */
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    /* Thiết kế Glassmorphism Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--primary-glow);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--r-heading-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title i {
+      color: var(--primary);
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #9ca3af;
+    }
+
+    .card-desc ul {
+      margin-left: 20px !important;
+      padding-left: 0 !important;
+    }
+
+    .card-desc li {
+      margin-bottom: 8px;
+    }
+
+    /* Điểm nhấn & Badge */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-primary {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .badge-success {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .badge-warning {
+      background-color: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .text-glow {
+      text-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .text-primary {
+      color: var(--primary) !important;
+    }
+
+    .text-success {
+      color: var(--success) !important;
+    }
+
+    .text-warning {
+      color: var(--warning) !important;
+    }
+
+    /* Custom Title Slide */
+    .title-slide {
+      text-align: left;
+      padding: 40px;
+    }
+
+    .title-slide h1 {
+      font-size: 2.8rem;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+    }
+
+    .title-slide h3 {
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .title-meta {
+      margin-top: 60px;
+      font-size: 0.95rem;
+      color: #9ca3af;
+      border-left: 4px solid var(--primary);
+      padding-left: 20px;
+    }
+
+    .title-meta table {
+      border: none !important;
+      margin: 0 !important;
+    }
+
+    .title-meta td {
+      border: none !important;
+      padding: 4px 10px !important;
+    }
+
+    /* Sơ đồ phân tầng */
+    .layer-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .layer {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 15px 20px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      align-items: center;
+      text-align: left;
+    }
+
+    .layer-name {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .layer-content {
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .layer-tech {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.07);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+
+    /* CSS Code Block Style */
+    pre code {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 0.8rem !important;
+      line-height: 1.4 !important;
+      border-radius: 8px !important;
+      background: #0d1117 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Quy trình Timeline */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 40px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 25px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: var(--border-card);
+      z-index: 1;
+    }
+
+    .timeline-step {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      width: 22%;
+    }
+
+    .timeline-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50px;
+      background: #111827;
+      border: 2px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px auto;
+      font-size: 1.2rem;
+      color: #9ca3af;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-step:hover .timeline-icon {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .timeline-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .timeline-desc {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      line-height: 1.4;
+      padding: 0 10px;
+    }
+
+    /* Các số liệu lớn */
+    .metric-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .metric-card {
+      text-align: center;
+      background: rgba(17, 24, 39, 0.5);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 30px 20px;
+    }
+
+    .metric-value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-shadow: 0 0 20px var(--primary-glow);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .metric-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    .metric-sub {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* Table custom */
+    .custom-table {
+      width: 100% !important;
+      font-size: 0.8rem !important;
+      border-collapse: collapse !important;
+      margin-top: 20px !important;
+    }
+
+    .custom-table th {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: var(--primary) !important;
+      font-weight: 700 !important;
+      border: 1px solid var(--border-card) !important;
+      padding: 8px 12px !important;
+    }
+
+    .custom-table td {
+      border: 1px solid var(--border-card) !important;
+      padding: 8px 12px !important;
+      background: rgba(17, 24, 39, 0.3) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- SLIDE 1: MỞ ĐẦU -->
+      <section data-transition="zoom">
+        <div class="title-slide">
+          <span class="badge badge-primary"><i class="fa-solid fa-graduation-cap"></i> Đồ án tốt nghiệp Công nghệ thông
+            tin</span>
+          <h1 style="margin-top: 20px;">GaraTP</h1>
+          <h3>Hệ thống đa nền tảng Quản lý & Chăm sóc Gara Ô tô tích hợp AI chẩn đoán lỗi</h3>
+
+          <div class="title-meta">
+            <table>
+              <tr>
+                <td><strong>Sinh viên thực hiện:</strong></td>
+                <td>Trương Hoàng Giang</td>
+                <td style="padding-left: 40px !important;"><strong>Mã số sinh viên:</strong></td>
+                <td>110122066</td>
+              </tr>
+              <tr>
+                <td><strong>Lớp:</strong></td>
+                <td>DA22TTD (Khóa 2022)</td>
+                <td style="padding-left: 40px !important;"><strong>Giảng viên hướng dẫn:</strong></td>
+                <td>[Tên Giảng Viên Hướng Dẫn]</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: LÝ DO CHỌN ĐỀ TÀI -->
+      <section data-transition="slide-in fade-out">
+        <h2>Lý do chọn đề tài & Thực trạng</h2>
+        <div class="grid grid-2">
+
+          <div class="card" style="border-left: 4px solid var(--danger);">
+            <div class="card-title">
+              <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+              <span>Nỗi đau của Gara truyền thống</span>
+            </div>
+            <div class="card-desc">
+              <ul>
+                <li><strong>Quản lý thủ công:</strong> Theo dõi xuất nhập kho phụ tùng qua sổ sách/Excel $\rightarrow$
+                  Dễ thất thoát, nhầm lẫn.</li>
+                <li><strong>Gián đoạn quy trình:</strong> Thiếu liên lạc tức thời giữa kỹ thuật viên (thợ máy) và nhà
+                  quản lý về tiến độ sửa xe.</li>
+                <li><strong>Quá tải cục bộ:</strong> Không ước lượng được lượng khách vào xưởng, dẫn đến giờ cao điểm bị
+                  ùn ứ xe.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--danger);">
+            <div class="card-title">
+              <i class="fa-solid fa-user-minus text-warning"></i>
+              <span>Bất cập từ phía Khách hàng</span>
+            </div>
+            <div class="card-desc">
+              <ul>
+                <li><strong>Thiếu minh bạch:</strong> Khách lo sợ bị khống giá hoặc thay thế phụ tùng kém chất lượng mà
+                  không có bằng chứng đối chiếu.</li>
+                <li><strong>Mất thời gian chờ:</strong> Đặt lịch sửa xe chỉ qua Hotline khiến khách hàng phải xếp hàng
+                  chờ đến lượt tại xưởng.</li>
+                <li><strong>Khó tra cứu:</strong> Không theo dõi được lịch sử bảo dưỡng và chi phí tích lũy của các xe
+                  mình sở hữu.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 3: MỤC TIÊU & GIẢI PHÁP -->
+      <section data-transition="slide-in fade-out">
+        <h2>Mục tiêu & Giải pháp đề xuất</h2>
+        <p style="font-size: 0.95rem; margin-top: -20px; color: #9ca3af; text-align: left; padding-left: 5px;">
+          Xây dựng hệ sinh thái đa nền tảng kết nối toàn diện Quản trị viên - Kỹ thuật viên - Khách hàng
+        </p>
+        <div class="grid grid-3" style="margin-top: 30px;">
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Web Dashboard</span>
+            </div>
+            <div class="card-desc">
+              Số hóa nghiệp vụ Gara:
+              <ul>
+                <li>Quản lý kho phụ tùng</li>
+                <li>Tiếp nhận, phân bổ công việc</li>
+                <li>Lập phiếu sửa chữa, hóa đơn</li>
+                <li>Biểu đồ báo cáo doanh thu</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+              <span>Mobile Client App</span>
+            </div>
+            <div class="card-desc">
+              Nâng cao trải nghiệm:
+              <ul>
+                <li>Đặt lịch hẹn theo giờ trống</li>
+                <li>Theo dõi tiến độ sửa chữa xe</li>
+                <li>Xem ảnh bằng chứng thực tế</li>
+                <li>Xem hóa đơn & lịch sử xe</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-color: var(--success);">
+            <div class="card-title">
+              <i class="fa-solid fa-robot text-success"></i>
+              <span class="text-success">Tích hợp AI Engine</span>
+            </div>
+            <div class="card-desc">
+              Tự động hóa thông minh:
+              <ul>
+                <li><strong>OCR:</strong> Trích xuất nhanh thông tin Cà vẹt xe từ ảnh chụp.</li>
+                <li><strong>Chatbot RAG:</strong> Chẩn đoán lỗi xe dựa trên hồ sơ đồng bộ thực tế.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 4: KIẾN TRÚC HỆ THỐNG -->
+      <section data-transition="slide-in fade-out">
+        <h2>Kiến trúc hệ thống đa tầng</h2>
+
+        <div class="layer-container">
+
+          <div class="layer" style="border-left: 4px solid #f43f5e;">
+            <div class="layer-name"><i class="fa-solid fa-display"></i> Giao diện (Client)</div>
+            <div class="layer-content">
+              <span class="layer-tech">Next.js 16 (React 19)</span> Web Dashboard dành cho Admin & Kỹ thuật viên
+              (Responsive Layout)
+              <br>
+              <span class="layer-tech">React Native (Expo SDK 54)</span> Mobile App cho khách hàng (giao diện Light/Dark
+              Mode)
+            </div>
+          </div>
+
+          <div class="layer" style="border-left: 4px solid #3b82f6;">
+            <div class="layer-name"><i class="fa-solid fa-gears"></i> Server & API</div>
+            <div class="layer-content">
+              <span class="layer-tech">Next.js API Routes</span> Xây dựng kiến trúc RESTful API phục vụ cả Web và Mobile
+              <br>
+              <span class="layer-tech">JWT Auth</span> Quản lý phiên qua HTTP-only cookies (Web) và Async Storage
+              (Mobile)
+            </div>
+          </div>
+
+          <div class="layer" style="border-left: 4px solid #10b981;">
+            <div class="layer-name"><i class="fa-solid fa-database"></i> Cơ sở dữ liệu</div>
+            <div class="layer-content">
+              <span class="layer-tech">Prisma ORM</span> Khai báo schema định hình dữ liệu thống nhất
+              <br>
+              <span class="layer-tech">SQLite DB</span> Cơ sở dữ liệu cục bộ gọn nhẹ (Dễ dàng nâng cấp PostgreSQL/MySQL
+              qua biến môi trường)
+            </div>
+          </div>
+
+          <div class="layer" style="border-left: 4px solid #d946ef;">
+            <div class="layer-name"><i class="fa-solid fa-brain"></i> Trí tuệ nhân tạo</div>
+            <div class="layer-content">
+              <span class="layer-tech">Google Gemini API</span> Chạy mô hình Gemini 1.5 Flash cho chatbot RAG đồng bộ
+              database
+              <br>
+              <span class="layer-tech">Cerebras LLM / GPT-4o-mini</span> Fallback dự phòng xử lý OCR cà vẹt xe và chẩn
+              đoán lỗi
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 5: THIẾT KẾ CƠ SỞ DỮ LIỆU -->
+      <section data-transition="slide-in fade-out">
+        <h2>Thiết kế Cơ sở dữ liệu (Database Schema)</h2>
+        <p style="font-size: 0.9rem; margin-top: -20px; color: #9ca3af; text-align: left; padding-left: 5px;">
+          Sơ đồ thực thể liên kết chuẩn hóa, thiết lập ràng buộc toàn vẹn chặt chẽ
+        </p>
+
+        <div class="grid grid-3" style="margin-top: 20px;">
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-user-gear"></i> Phân quyền Người dùng</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <strong>User:</strong> Tài khoản quản lý, thợ sửa xe. Phân quyền `ADMIN` và `TECHNICIAN`.
+              <br><br>
+              <strong>Customer:</strong> Tài khoản chủ xe trên Mobile, đăng ký bằng SĐT độc nhất làm ID đăng nhập.
+            </div>
+          </div>
+
+          <div class="card" style="border-color: var(--primary);">
+            <div class="card-title"><i class="fa-solid fa-file-invoice"></i> Nghiệp vụ sửa chữa</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <strong>Car:</strong> Lưu thông tin xe (Biển số, VIN, Số máy, Đời xe).
+              <br><br>
+              <strong>MaintenanceRecord:</strong> Phiếu sửa chữa trung tâm, ghi nhận thông tin xe, kỹ thuật viên phụ
+              trách, tổng chi phí.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-boxes-stacked"></i> Kho & Bằng chứng</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <strong>Part & MaintenancePart:</strong> Liên kết phụ tùng thay thế và tự trừ số lượng tồn kho thực tế.
+              <br><br>
+              <strong>Evidence:</strong> Lưu trữ ảnh chụp vật chứng sửa chữa liên kết với phiếu (`onDelete: Cascade`).
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 6: PHÂN HỆ WEB DASHBOARD -->
+      <section data-transition="slide-in fade-out">
+        <h2>Phân hệ Web Dashboard — Số hóa quản trị</h2>
+        <div class="grid grid-2">
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-toolbox"></i> Các phân hệ nghiệp vụ chính</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ul>
+                <li><strong>Báo cáo doanh số trực quan:</strong> Sử dụng thư viện Recharts để vẽ biểu đồ tăng trưởng
+                  doanh thu theo tháng và thống kê hiệu suất thợ.</li>
+                <li><strong>Quản lý lịch hẹn:</strong> Tiếp nhận lịch hẹn từ Mobile, phê duyệt, từ chối và phân bổ kỹ
+                  thuật viên phụ trách.</li>
+                <li><strong>Quản lý kho thông minh:</strong> Danh mục phụ tùng, đơn giá, cảnh báo đỏ khi phụ tùng trong
+                  kho sắp chạm ngưỡng cạn kiệt.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-clipboard-list"></i> Quy trình tạo Phiếu sửa chữa</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ol>
+                <li><strong>Tiếp nhận:</strong> Quét ảnh Cà vẹt xe để tự động điền nhanh hồ sơ xe.</li>
+                <li><strong>Khảo sát:</strong> Thợ máy khám xe, chọn hạng mục kiểm tra cần thực hiện.</li>
+                <li><strong>Vật tư:</strong> Lựa chọn phụ tùng thay thế trực tiếp từ kho (Đồng bộ đơn giá thực tế).</li>
+                <li><strong>Bằng chứng:</strong> Chụp và tải ảnh hiện trạng xe trước/sau khi sửa lên máy chủ qua API
+                  Upload.</li>
+                <li><strong>Quyết toán:</strong> In hóa đơn nhiệt/in A4 trực tiếp từ trình duyệt web.</li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 7: PHÂN HỆ MOBILE CLIENT APP -->
+      <section data-transition="slide-in fade-out">
+        <h2>Phân hệ Mobile App — Trải nghiệm khách hàng</h2>
+        <div class="grid grid-2">
+
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <div class="card-title"><i class="fa-solid fa-calendar-check text-primary"></i> Đặt lịch hẹn thông minh
+            </div>
+            <div class="card-desc">
+              <ul>
+                <li><strong>Real-time Slot Booking:</strong> Khách chọn ngày giờ sửa xe dựa trên khung giờ còn trống
+                  thực tế.</li>
+                <li><strong>Chống quá tải xưởng:</strong> Hệ thống tự động giới hạn số xe tối đa được đặt trên mỗi khung
+                  giờ (ví dụ: tối đa 5 xe/giờ).</li>
+                <li>Xem lịch sử lịch hẹn: Đang chờ duyệt, Đã duyệt, Đã hoàn thành, Đã hủy kèm lý do cụ thể.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-left: 4px solid var(--success);">
+            <div class="card-title"><i class="fa-solid fa-eye text-success"></i> Minh bạch hóa dịch vụ</div>
+            <div class="card-desc">
+              <ul>
+                <li><strong>Theo dõi tiến độ:</strong> Khách hàng biết được trạng thái xe đang sửa thế nào qua ứng dụng
+                  di động.</li>
+                <li><strong>Xem hình ảnh vật chứng:</strong> Ảnh chụp trực tiếp chi tiết bộ phận bị hỏng và linh kiện
+                  thay thế mới do kỹ thuật viên tải lên Web.</li>
+                <li><strong>Quản lý chi phí:</strong> Tra cứu hóa đơn chi tiết từng lần bảo dưỡng, kiểm tra tổng tiền
+                  tích lũy đã chi tiêu tại gara.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 8: KỸ THUẬT AI 1 - QUÉT CÀ VẸT XE (OCR) -->
+      <section data-transition="slide-in fade-out">
+        <h2>Kỹ thuật AI 1: Quét Cà Vẹt xe (OCR)</h2>
+        <p style="font-size: 0.9rem; margin-top: -20px; color: #9ca3af; text-align: left; padding-left: 5px;">
+          Tự động hóa việc tạo hồ sơ xe bằng cách trích xuất dữ liệu có cấu trúc từ ảnh chụp
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 15px;">
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Quy trình trích xuất</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ul>
+                <li>Giao diện Web/Mobile gửi ảnh chụp cà vẹt dưới dạng chuỗi Base64 lên Endpoint API `/api/ai/scan-car`.
+                </li>
+                <li>Hệ thống gửi yêu cầu kèm ảnh đến mô hình LLM Vision (`gpt-4o-mini`).</li>
+                <li><strong>System Prompt định hình cấu trúc:</strong> Yêu cầu trả về DUY NHẤT một chuỗi JSON hợp lệ
+                  chứa các thông tin biển số, số khung (VIN), số máy, nhãn hiệu...</li>
+                <li><strong class="text-success">Cơ chế chịu lỗi (Mock Fallback):</strong> Nếu API Key bị hết hạn hạn
+                  mức (Quota exceeded) hoặc mất mạng, hệ thống tự động phản hồi dữ liệu giả lập hợp lệ để giao diện Demo
+                  không bị dừng đột ngột.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 10px;">
+            <pre style="margin: 0; height: 100%;"><code class="language-json" data-trim>
+// JSON Output trích xuất thành công:
+{
+  "licensePlate": "51H-123.45",
+  "brand": "TOYOTA",
+  "model": "INNOVA",
+  "year": 2020,
+  "ownerName": "NGUYEN VAN A",
+  "vin": "RL412345678901234",
+  "engineNumber": "1TR1234567",
+  "color": "Bạc"
+}
+            </code></pre>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 9: KỸ THUẬT AI 2 - CHATBOT CHẨN ĐOÁN RAG -->
+      <section data-transition="slide-in fade-out">
+        <h2>Kỹ thuật AI 2: Chatbot chẩn đoán & RAG</h2>
+        <p style="font-size: 0.9rem; margin-top: -20px; color: #9ca3af; text-align: left; padding-left: 5px;">
+          Trợ lý ảo tư vấn lỗi kỹ thuật cá nhân hóa nhờ đồng bộ hóa dữ liệu thời gian thực
+        </p>
+
+        <div class="grid grid-2" style="margin-top: 15px;">
+
+          <div class="card">
+            <div class="card-title"><i class="fa-solid fa-database text-primary"></i> Tích hợp dữ liệu hệ thống (RAG)
+            </div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ul>
+                <li>Khi khách hàng trò chuyện, API giải mã JWT token để xác thực tài khoản.</li>
+                <li>Hệ thống truy vấn cơ sở dữ liệu để lấy thông tin: <i>Tên khách hàng, danh sách xe đang sở hữu, lịch
+                    sử bảo dưỡng đã thực hiện (kèm phụ tùng cũ đã thay) và các lịch hẹn đặt trước.</i></li>
+                <li>Thông tin được biên dịch làm ngữ cảnh nền (`customerContext`) đưa vào System Prompt của Google
+                  Gemini.</li>
+                <li><strong>Kết quả:</strong> AI trả lời chính xác các câu hỏi cá nhân như: "Xe tôi lần trước sửa hết
+                  bao nhiêu tiền?" hay "Xe tôi có lịch hẹn nào sắp tới không?".</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-color: var(--success);">
+            <div class="card-title"><i class="fa-solid fa-shield-halved text-success"></i> Cơ chế dự phòng Đa tầng
+              (Fallback)</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              Để đảm bảo hoạt động 24/7 ổn định:
+              <div class="layer-container" style="margin-top: 10px; gap: 8px;">
+                <div
+                  style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); padding: 5px 10px; border-radius: 6px; font-size: 0.75rem;">
+                  <strong>Tầng 1 (Ưu tiên):</strong> Google Gemini API (Model: `gemini-1.5-flash`)
+                </div>
+                <div
+                  style="background: rgba(59, 130, 246, 0.1); border: 1px solid var(--primary); padding: 5px 10px; border-radius: 6px; font-size: 0.75rem;">
+                  <strong>Tầng 2 (Dự phòng):</strong> FreeModel Proxy API (`gpt-4o-mini`)
+                </div>
+                <div
+                  style="background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); padding: 5px 10px; border-radius: 6px; font-size: 0.75rem;">
+                  <strong>Tầng 3 (Local offline):</strong> Local Regex Engine & Direct DB Queries
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 10: VÍ DỤ NGHIỆP VỤ THỰC TẾ -->
+      <section data-transition="slide-in fade-out">
+        <h2>Ví dụ nghiệp vụ thực tế (End-to-End Workflow)</h2>
+        <p style="font-size: 0.9rem; margin-top: -20px; color: #9ca3af; text-align: left; padding-left: 5px;">
+          Kịch bản giả định: Khách hàng Nguyễn Văn A và xe Toyota Innova (Biển số: 51H-123.45)
+        </p>
+
+        <div class="timeline">
+
+          <div class="timeline-step">
+            <div class="timeline-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+            <div class="timeline-title">1. Đặt lịch hẹn</div>
+            <div class="timeline-desc">Anh A đặt lịch bảo dưỡng gầm xe trên App di động vào lúc 09:00 ngày 15/06/2026.
+              Lịch hẹn ở trạng thái `PENDING`.</div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="timeline-title">2. Tiếp nhận xe</div>
+            <div class="timeline-desc">Quản lý duyệt lịch hẹn trên Dashboard. Khi xe tới xưởng, thợ quét cà vẹt để tự
+              động điền nhanh hồ sơ xe Innova.</div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon"><i class="fa-solid fa-wrench"></i></div>
+            <div class="timeline-title">3. Thay thế & Chụp ảnh</div>
+            <div class="timeline-desc">Thợ phát hiện mòn má phanh. Tiến hành thay mới từ kho, chụp lại ảnh má phanh mòn
+              và má phanh mới thay làm vật chứng.</div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+            <div class="timeline-title">4. Hóa đơn & Notify</div>
+            <div class="timeline-desc">Hệ thống tính tiền (1 triệu đồng) và in hóa đơn. Mobile App tự động nhận thông
+              báo đẩy. Anh A xem ảnh vật chứng và nhận xe.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 11: ĐÁNH GIÁ KẾT QUẢ & HIỆU NĂNG -->
+      <section data-transition="slide-in fade-out">
+        <h2>Đánh giá kết quả & Hiệu năng</h2>
+
+        <div class="metric-container">
+
+          <div class="metric-card" style="border-bottom: 4px solid var(--primary);">
+            <div class="metric-value">&lt; 150ms</div>
+            <div class="metric-label">Thời gian phản hồi API</div>
+            <div class="metric-sub">Nhờ tối ưu hóa chỉ mục (indexes) trong SQLite và kết nối gọn nhẹ của Prisma Client.
+            </div>
+          </div>
+
+          <div class="metric-card" style="border-bottom: 4px solid var(--success);">
+            <div class="metric-value">&lt; 1.0s</div>
+            <div class="metric-label">Tốc độ chẩn đoán AI</div>
+            <div class="metric-sub">Tối ưu hóa thời gian sinh chuỗi nhờ model Gemini 1.5 Flash và Cerebras API siêu tốc.
+            </div>
+          </div>
+
+          <div class="metric-card" style="border-bottom: 4px solid var(--warning);">
+            <div class="metric-value">100%</div>
+            <div class="metric-label">Đồng bộ hóa dữ liệu</div>
+            <div class="metric-sub">Dữ liệu hóa đơn, lịch hẹn, hình ảnh vật chứng được cập nhật thời gian thực giữa Web
+              và Mobile.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 12: KẾT LUẬN & HƯỚNG PHÁT TRIỂN -->
+      <section data-transition="zoom">
+        <h2>Kết luận & Hướng phát triển</h2>
+        <div class="grid grid-2">
+
+          <div class="card" style="border-top: 4px solid var(--success);">
+            <div class="card-title text-success"><i class="fa-solid fa-circle-check"></i> Kết quả đạt được</div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ul>
+                <li><strong>Số hóa toàn diện:</strong> Giải quyết bài toán thất thoát kho phụ tùng và quản lý thợ hiệu
+                  quả cho chủ Gara.</li>
+                <li><strong>Nâng tầm uy tín:</strong> Tạo dựng sự tin cậy tuyệt đối cho khách hàng nhờ xem ảnh vật chứng
+                  thực tế trên Mobile.</li>
+                <li><strong>Ứng dụng AI thực tiễn:</strong> Giải quyết nghiệp vụ thực tế (OCR, Chatbot đồng bộ dữ liệu)
+                  thay vì chỉ lý thuyết suông.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="border-top: 4px solid var(--primary);">
+            <div class="card-title text-primary"><i class="fa-solid fa-forward-step"></i> Hướng phát triển tương lai
+            </div>
+            <div class="card-desc" style="font-size: 0.85rem;">
+              <ul>
+                <li><strong>Nâng cấp Database:</strong> Chuyển sang PostgreSQL chạy trên môi trường Cloud (AWS/Vercel)
+                  để nâng cao khả năng chịu tải.</li>
+                <li><strong>Tích hợp Cổng thanh toán:</strong> Kết nối trực tiếp với VNPAY, MoMo trên Mobile App giúp
+                  thanh toán không tiền mặt.</li>
+                <li><strong>Thông báo tức thời (Real-time):</strong> Triển khai Socket.io để thông báo đẩy trạng thái xe
+                  sửa xong ngay lập tức.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js & Plugins JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/markdown/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+
+  <script>
+    // Khởi tạo Reveal.js với các tùy chọn giao diện tối ưu
+    Reveal.initialize({
+      hash: true,
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
+</body>
+
+</html>

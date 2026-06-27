@@ -44,40 +44,75 @@ export type AuthResult = {
   customer: CustomerInfo;
 };
 
+async function safeFetch(url: string, init: RequestInit): Promise<Response> {
+  try {
+    return await fetch(url, init);
+  } catch (err) {
+    throw new Error(`Không kết nối được máy chủ. Vui lòng kiểm tra kết nối mạng hoặc ngrok tunnel.`);
+  }
+}
+
+async function handleResponse(res: Response) {
+  const text = await res.text();
+  let data: any = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = null;
+    }
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.error ?? `Lỗi máy chủ (${res.status})`);
+  }
+
+  if (data === null) {
+    throw new Error('Phản hồi từ máy chủ không hợp lệ (Không phải JSON)');
+  }
+
+  return data;
+}
+
 export async function apiRegister(
   phone: string,
   password: string,
   fullname?: string,
   licensePlate?: string
 ): Promise<AuthResult> {
-  const res = await fetch(`${API_BASE_URL}/api/auth/customer`, {
+  const res = await safeFetch(`${API_BASE_URL}/api/auth/customer`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    },
     body: JSON.stringify({ action: 'register', phone, password, fullname, licensePlate }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error ?? `Lỗi ${res.status}`);
-  return data as AuthResult;
+  return handleResponse(res);
 }
 
 export async function apiLogin(phone: string, password: string): Promise<AuthResult> {
-  const res = await fetch(`${API_BASE_URL}/api/auth/customer`, {
+  const res = await safeFetch(`${API_BASE_URL}/api/auth/customer`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true',
+    },
     body: JSON.stringify({ action: 'login', phone, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error ?? `Lỗi ${res.status}`);
-  return data as AuthResult;
+  return handleResponse(res);
 }
 
 export async function apiVerifyToken(token: string): Promise<CustomerInfo | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/auth/customer/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const res = await safeFetch(`${API_BASE_URL}/api/auth/customer/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'ngrok-skip-browser-warning': 'true',
+      },
     });
     if (!res.ok) return null;
-    const data = await res.json();
+    const data = await handleResponse(res);
     return data.customer as CustomerInfo;
   } catch {
     return null;
@@ -88,16 +123,16 @@ export async function apiUpdateProfile(
   token: string,
   data: { fullname?: string; licensePlate?: string }
 ): Promise<CustomerInfo> {
-  const res = await fetch(`${API_BASE_URL}/api/auth/customer/me`, {
+  const res = await safeFetch(`${API_BASE_URL}/api/auth/customer/me`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
+      'ngrok-skip-browser-warning': 'true',
     },
     body: JSON.stringify(data),
   });
-  const json = await res.json();
-  if (!res.ok) throw new Error(json.error ?? `Lỗi ${res.status}`);
+  const json = await handleResponse(res);
   return json.customer as CustomerInfo;
 }
 

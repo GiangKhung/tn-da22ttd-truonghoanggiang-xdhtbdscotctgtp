@@ -1,22 +1,22 @@
 export const colors = {
-  bg: '#f7f8fb',
-  card: '#ffffff',
-  text: '#0f172a',
-  textMuted: '#64748b',
-  textSubtle: '#94a3b8',
-  border: '#e2e8f0',
-  primary: '#0f172a',
-  primaryFg: '#ffffff',
-  accent: '#2563eb',
-  accentFg: '#ffffff',
-  success: '#16a34a',
+  bg: '#09090b',
+  card: '#121214',
+  text: '#ffffff',
+  textMuted: '#a0a0a5',
+  textSubtle: '#64748b',
+  border: 'rgba(197, 168, 128, 0.15)',
+  primary: '#c5a880',
+  primaryFg: '#09090b',
+  accent: '#c5a880',
+  accentFg: '#09090b',
+  success: '#10b981',
   warning: '#f59e0b',
-  danger: '#dc2626',
+  danger: '#f43f5e',
   pending: '#f59e0b',
-  confirmed: '#2563eb',
-  completed: '#16a34a',
-  cancelled: '#94a3b8',
-  quoting: '#3b82f6',
+  confirmed: '#c5a880',
+  completed: '#10b981',
+  cancelled: '#64748b',
+  quoting: '#c5a880',
   inProgress: '#f59e0b',
 };
 
@@ -30,11 +30,12 @@ export const spacing = {
 };
 
 export const radius = {
-  sm: 6,
-  md: 10,
-  lg: 14,
+  sm: 4,
+  md: 4,
+  lg: 4,
   pill: 999,
 };
+
 
 export const statusLabels: Record<string, string> = {
   PENDING: 'Chờ xử lý',

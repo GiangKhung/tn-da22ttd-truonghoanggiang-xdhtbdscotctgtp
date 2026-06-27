@@ -82,7 +82,7 @@ export default function AuthScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      style={{ flex: 1, backgroundColor: colors.primary }}
+      style={{ flex: 1, backgroundColor: colors.bg }}
     >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         {/* Header */}
@@ -175,7 +175,7 @@ export default function AuthScreen() {
                 autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
               <TouchableOpacity onPress={() => setShowPwd((v) => !v)} style={styles.eyeBtn}>
-                <Text style={styles.eyeIcon}>{showPwd ? '🙈' : '👁️'}</Text>
+                <Text style={styles.eyeIcon}>{showPwd ? 'Ẩn' : 'Hiện'}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -204,7 +204,7 @@ export default function AuthScreen() {
             activeOpacity={0.8}
           >
             {loading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.primaryFg} />
             ) : (
               <Text style={styles.btnText}>
                 {mode === 'login' ? 'Đăng nhập' : 'Tạo tài khoản'}
@@ -266,17 +266,26 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.5)',
   },
   tabTextActive: {
-    color: '#fff',
+    color: colors.primaryFg,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: radius.lg,
     padding: spacing.xl,
     gap: spacing.md,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 6px 16px rgba(0, 0, 0, 0.15)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOpacity: 0.15,
+        shadowRadius: 16,
+        elevation: 6,
+      },
+    }),
   },
   fieldGroup: { gap: spacing.xs },
   label: {
@@ -294,7 +303,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm + 2,
     fontSize: 15,
     color: colors.text,
-    backgroundColor: '#fafafa',
+    backgroundColor: 'rgba(255,255,255,0.02)',
   },
   pwdWrap: {
     flexDirection: 'row',
@@ -305,7 +314,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
   },
-  eyeIcon: { fontSize: 18 },
+  eyeIcon: { fontSize: 12, color: colors.accent, fontWeight: '600', textTransform: 'uppercase' },
   btn: {
     marginTop: spacing.sm,
     backgroundColor: colors.accent,
@@ -314,7 +323,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText: {
-    color: '#fff',
+    color: colors.primaryFg,
     fontWeight: '700',
     fontSize: 16,
   },

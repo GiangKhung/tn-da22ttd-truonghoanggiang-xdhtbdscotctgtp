@@ -144,8 +144,8 @@ export default function LoginPage() {
         body { font-family: 'Inter', sans-serif; }
         input:focus {
           outline: none !important;
-          border-color: #2563eb !important;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+          border-color: #10b981 !important;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
         }
         @keyframes float1 {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -171,7 +171,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)',
+    background: 'linear-gradient(135deg, #070e13 0%, #0d1e21 50%, #070e13 100%)',
     fontFamily: "'Inter', sans-serif",
     position: 'relative',
     overflow: 'hidden',
@@ -182,7 +182,7 @@ const styles = {
     width: '500px',
     height: '500px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%)',
     top: '-100px',
     left: '-150px',
     animation: 'float1 8s ease-in-out infinite',
@@ -193,22 +193,22 @@ const styles = {
     width: '400px',
     height: '400px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, rgba(0, 255, 136, 0.12) 0%, transparent 70%)',
     bottom: '-80px',
     right: '-100px',
     animation: 'float2 10s ease-in-out infinite',
     pointerEvents: 'none',
   },
   card: {
-    background: 'rgba(255, 255, 255, 0.06)',
+    background: 'rgba(14, 22, 29, 0.7)',
     backdropFilter: 'blur(24px)',
     WebkitBackdropFilter: 'blur(24px)',
-    border: '1px solid rgba(255, 255, 255, 0.12)',
+    border: '1px solid rgba(0, 255, 136, 0.1)',
     borderRadius: '24px',
     padding: '2.5rem',
     width: '100%',
     maxWidth: '420px',
-    boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
+    boxShadow: '0 32px 64px rgba(0,0,0,0.6)',
     animation: 'fadeInUp 0.6s ease-out',
     position: 'relative',
     zIndex: 1,
@@ -218,13 +218,13 @@ const styles = {
     width: '64px',
     height: '64px',
     borderRadius: '16px',
-    background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+    background: 'linear-gradient(135deg, #10b981, #059669)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     margin: '0 auto 1rem',
     fontSize: '28px',
-    boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
+    boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)',
   },
   logoIcon: { lineHeight: 1 },
   brand: {
@@ -254,8 +254,8 @@ const styles = {
   input: {
     width: '100%',
     padding: '0.75rem 1rem 0.75rem 2.5rem',
-    background: 'rgba(255,255,255,0.08)',
-    border: '1px solid rgba(255,255,255,0.15)',
+    background: 'rgba(255,255,255,0.06)',
+    border: '1px solid rgba(255,255,255,0.12)',
     borderRadius: '12px',
     color: '#ffffff',
     fontSize: '0.9375rem',
@@ -285,15 +285,15 @@ const styles = {
   submitBtn: {
     marginTop: '0.5rem',
     padding: '0.875rem',
-    background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+    background: 'linear-gradient(135deg, #10b981, #059669)',
     border: 'none',
     borderRadius: '12px',
-    color: '#ffffff',
+    color: '#050a0e',
     fontSize: '1rem',
     fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.2s',
-    boxShadow: '0 4px 16px rgba(37, 99, 235, 0.4)',
+    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.3)',
   },
   loadingInner: { display: 'inline-flex', alignItems: 'center', gap: '0.5rem' },
   spinner: {

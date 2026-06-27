@@ -46,7 +46,6 @@ export default function HistoryScreen() {
   if (!enabled) {
     return (
       <View style={styles.notice}>
-        <Text style={styles.noticeIcon}>🛠️</Text>
         <Text style={styles.noticeTitle}>Chưa có biển số xe</Text>
         <Text style={styles.noticeText}>
           Vui lòng cập nhật biển số xe trong tab{' '}
@@ -83,7 +82,7 @@ export default function HistoryScreen() {
                     ]}
                   >
                     <Text style={[styles.carSelectText, isSelected && styles.carSelectTextActive]}>
-                      🚗 {c.licensePlate} ({c.brand})
+                      {c.licensePlate} ({c.brand})
                     </Text>
                   </TouchableOpacity>
                 );
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     gap: spacing.md,
   },
-  noticeIcon: { fontSize: 52 },
   noticeTitle: {
     fontSize: 18,
     fontWeight: '700',
@@ -157,13 +155,13 @@ const styles = StyleSheet.create({
   carSelectChip: {
     paddingHorizontal: spacing.sm + 2,
     paddingVertical: spacing.xs + 2,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.card,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.border,
   },
   carSelectChipActive: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(197, 168, 128, 0.08)',
     borderColor: colors.accent,
   },
   carSelectText: {

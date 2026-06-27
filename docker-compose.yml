@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: garatp-web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # Ghi đè đường dẫn SQLite vào thư mục được mount volume để tránh mất dữ liệu khi restart/redeploy container
+      - DATABASE_URL=file:/app/db/dev.db
+      # Sử dụng các biến môi trường cấu hình trong tệp .env ở máy host
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FREEMODEL_API_KEY=${FREEMODEL_API_KEY}
+    volumes:
+      # Mount volume để lưu trữ CSDL SQLite vĩnh viễn
+      - sqlite_data:/app/db
+      # Mount volume để lưu trữ hình ảnh vật chứng bảo dưỡng do người dùng/kỹ thuật viên tải lên
+      - uploads_data:/app/public/uploads
+
+volumes:
+  # Định nghĩa các volume lưu trữ dữ liệu vĩnh viễn (persistent data)
+  sqlite_data:
+    driver: local
+  uploads_data:
+    driver: local

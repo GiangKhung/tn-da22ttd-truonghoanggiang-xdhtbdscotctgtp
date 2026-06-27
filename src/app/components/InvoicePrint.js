@@ -6,7 +6,44 @@ export const InvoiceContent = React.forwardRef(({ car, record }, ref) => {
   const parts = record.maintenanceParts || [];
 
   return (
-    <div ref={ref} style={{ padding: '40px', fontFamily: 'sans-serif', color: '#000', backgroundColor: '#fff' }}>
+    <div ref={ref} className="invoice-container" style={{ padding: '40px', fontFamily: 'sans-serif', color: '#000', backgroundColor: '#fff' }}>
+      <style dangerouslySetInnerHTML={{__html: `
+        .invoice-container {
+          color: #000 !important;
+          background-color: #fff !important;
+        }
+        .invoice-container h1, 
+        .invoice-container h2, 
+        .invoice-container h3, 
+        .invoice-container h4, 
+        .invoice-container h5, 
+        .invoice-container h6,
+        .invoice-container p,
+        .invoice-container div,
+        .invoice-container span,
+        .invoice-container strong,
+        .invoice-container li,
+        .invoice-container td,
+        .invoice-container th {
+          color: #000 !important;
+        }
+        .invoice-container table {
+          border-collapse: collapse !important;
+          border: 1px solid #000 !important;
+          width: 100% !important;
+        }
+        .invoice-container th, 
+        .invoice-container td {
+          color: #000 !important;
+          border: 1px solid #000 !important;
+          padding: 8px !important;
+          background-color: transparent !important;
+        }
+        .invoice-container th {
+          background-color: #f1f5f9 !important;
+          font-weight: bold !important;
+        }
+      `}} />
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
         <h1 style={{ margin: 0, fontSize: '24px' }}>GARA Ô TÔ TRƯỜNG PHÁT</h1>
         <p style={{ margin: '5px 0' }}>Trái tim của những chuyến đi an toàn</p>

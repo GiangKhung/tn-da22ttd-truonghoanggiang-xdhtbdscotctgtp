@@ -211,7 +211,7 @@ export default function AccountScreen() {
             <Text style={styles.cardTitle}>Thông tin cá nhân</Text>
             {!editing && (
               <TouchableOpacity onPress={handleEdit} style={styles.editBtn}>
-                <Text style={styles.editBtnText}>✏️ Chỉnh sửa</Text>
+                <Text style={styles.editBtnText}>Chỉnh sửa</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -260,7 +260,7 @@ export default function AccountScreen() {
                   activeOpacity={0.8}
                 >
                   {saving ? (
-                    <ActivityIndicator color="#fff" size="small" />
+                    <ActivityIndicator color={colors.primaryFg} size="small" />
                   ) : (
                     <Text style={styles.btnPrimaryText}>Lưu</Text>
                   )}
@@ -286,7 +286,7 @@ export default function AccountScreen() {
         {/* Hộp thư thông báo */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>🔔 Hộp thư thông báo</Text>
+            <Text style={styles.cardTitle}>Hộp thư thông báo</Text>
             {unreadCount > 0 && (
               <TouchableOpacity onPress={handleMarkAsRead} style={styles.editBtn}>
                 <Text style={styles.editBtnText}>Đã đọc tất cả</Text>
@@ -321,7 +321,7 @@ export default function AccountScreen() {
                     </View>
                     <Text style={styles.notifContent}>{n.content}</Text>
                     <Text style={styles.notifTime}>
-                      📅 {new Date(n.createdAt).toLocaleString('vi-VN', {
+                      {new Date(n.createdAt).toLocaleString('vi-VN', {
                         hour: '2-digit',
                         minute: '2-digit',
                         day: '2-digit',
@@ -342,7 +342,7 @@ export default function AccountScreen() {
             <Text style={styles.cardTitle}>Danh sách xe của bạn</Text>
             {!carAdding && (
               <TouchableOpacity onPress={() => setCarAdding(true)} style={styles.editBtn}>
-                <Text style={styles.editBtnText}>➕ Thêm xe</Text>
+                <Text style={styles.editBtnText}>Thêm xe</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -444,7 +444,7 @@ export default function AccountScreen() {
                   activeOpacity={0.8}
                 >
                   {addCarMut.isPending ? (
-                    <ActivityIndicator color="#fff" size="small" />
+                    <ActivityIndicator color={colors.primaryFg} size="small" />
                   ) : (
                     <Text style={styles.btnPrimaryText}>Thêm</Text>
                   )}
@@ -498,7 +498,7 @@ export default function AccountScreen() {
 
         {/* Đăng xuất */}
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} activeOpacity={0.8}>
-          <Text style={styles.logoutText}>🚪  Đăng xuất</Text>
+          <Text style={styles.logoutText}>Đăng xuất</Text>
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -545,10 +545,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.xs,
-    shadowColor: colors.accent,
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 6,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 6px 12px rgba(37, 99, 235, 0.4)',
+      },
+      default: {
+        shadowColor: colors.accent,
+        shadowOpacity: 0.4,
+        shadowRadius: 12,
+        elevation: 6,
+      },
+    }),
   },
   avatarText: { fontSize: 28, fontWeight: '800', color: '#fff' },
   name: { fontSize: 20, fontWeight: '700', color: colors.text },
@@ -562,10 +569,17 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     borderWidth: 1,
     borderColor: colors.border,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+        elevation: 2,
+      },
+    }),
   },
   cardHeader: {
     flexDirection: 'row',
@@ -582,7 +596,7 @@ const styles = StyleSheet.create({
   editBtn: {
     paddingVertical: 4,
     paddingHorizontal: spacing.sm,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(197, 168, 128, 0.08)',
     borderRadius: radius.pill,
   },
   editBtnText: { fontSize: 12, fontWeight: '600', color: colors.accent },
@@ -604,7 +618,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm + 2,
     fontSize: 15,
     color: colors.text,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: colors.bg,
   },
   hint: {
     fontSize: 11,
@@ -630,7 +644,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm + 2,
     alignItems: 'center',
   },
-  btnPrimaryText: { fontSize: 14, fontWeight: '700', color: '#fff' },
+  btnPrimaryText: { fontSize: 14, fontWeight: '700', color: colors.primaryFg },
 
   // Info row
   infoRow: {
@@ -644,7 +658,7 @@ const styles = StyleSheet.create({
 
   // Info card
   infoCard: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.card,
     borderRadius: radius.md,
     padding: spacing.md,
     gap: spacing.xs,
@@ -655,9 +669,9 @@ const styles = StyleSheet.create({
 
   // Logout
   logoutBtn: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: 'rgba(244, 63, 94, 0.08)',
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: 'rgba(244, 63, 94, 0.2)',
     borderRadius: radius.md,
     paddingVertical: spacing.md,
     alignItems: 'center',
@@ -676,9 +690,9 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   plateContainer: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(197, 168, 128, 0.08)',
     borderWidth: 1.5,
-    borderColor: '#BFDBFE',
+    borderColor: 'rgba(197, 168, 128, 0.25)',
     borderRadius: radius.sm,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -689,9 +703,9 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
   removeBtn: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: 'rgba(244, 63, 94, 0.08)',
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: 'rgba(244, 63, 94, 0.2)',
     borderRadius: radius.sm,
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
@@ -704,13 +718,13 @@ const styles = StyleSheet.create({
   notifItem: {
     padding: spacing.md,
     borderRadius: radius.md,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.border,
   },
   notifItemUnread: {
-    backgroundColor: '#F8FAFC',
-    borderColor: '#BFDBFE',
+    backgroundColor: 'rgba(197, 168, 128, 0.05)',
+    borderColor: 'rgba(197, 168, 128, 0.2)',
     borderLeftWidth: 4,
     borderLeftColor: colors.accent,
   },
@@ -724,7 +738,7 @@ const styles = StyleSheet.create({
   },
   notifContent: {
     fontSize: 13,
-    color: '#475569',
+    color: colors.textMuted,
     lineHeight: 18,
   },
   notifTime: {

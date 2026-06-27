@@ -167,7 +167,7 @@ export default function BookingScreen() {
                       ]}
                     >
                       <Text style={[styles.carSelectText, isSelected && styles.carSelectTextActive]}>
-                        🚗 {car.licensePlate} ({car.brand})
+                        {car.licensePlate} ({car.brand})
                       </Text>
                     </TouchableOpacity>
                   );
@@ -276,13 +276,13 @@ const styles = StyleSheet.create({
   carSelectChip: {
     paddingHorizontal: spacing.sm + 2,
     paddingVertical: spacing.xs + 2,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.card,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.border,
   },
   carSelectChipActive: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(197, 168, 128, 0.08)',
     borderColor: colors.accent,
   },
   carSelectText: {

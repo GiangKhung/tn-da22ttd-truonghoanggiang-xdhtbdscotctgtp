@@ -28,7 +28,9 @@ export async function GET(request, context) {
               technician: { select: { fullname: true, username: true } },
               maintenanceParts: {
                   include: { part: true }
-              }
+              },
+              evidences: true,
+              maintenanceTasks: true
           },
           orderBy: { date: 'desc' }
         }

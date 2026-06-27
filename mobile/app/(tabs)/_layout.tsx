@@ -1,10 +1,6 @@
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
 import { colors } from '@/theme';
-
-function TabIcon({ glyph, color }: { glyph: string; color: string }) {
-  return <Text style={{ color, fontSize: 18 }}>{glyph}</Text>;
-}
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabsLayout() {
   return (
@@ -12,46 +8,56 @@ export default function TabsLayout() {
       screenOptions={{
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textMuted,
-        headerStyle: { backgroundColor: colors.bg },
+        headerStyle: { backgroundColor: colors.bg, borderBottomWidth: 1, borderBottomColor: colors.border },
         headerTitleStyle: { fontWeight: '700' },
-        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+        headerTintColor: colors.text,
+        tabBarLabelStyle: { fontSize: 9, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 },
+        tabBarStyle: {
+          backgroundColor: colors.card,
+          borderTopColor: colors.border,
+          borderTopWidth: 1,
+          paddingTop: 6,
+          height: 60,
+          paddingBottom: 8,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Đặt lịch',
-          tabBarIcon: ({ color }) => <TabIcon glyph="📅" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="calendar-outline" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="appointments"
         options={{
-          title: 'Lịch của tôi',
-          tabBarIcon: ({ color }) => <TabIcon glyph="🗓" color={color} />,
+          title: 'Lịch hẹn',
+          tabBarIcon: ({ color }) => <Ionicons name="time-outline" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="ai-chat"
         options={{
           title: 'Trợ lý AI',
-          tabBarIcon: ({ color }) => <TabIcon glyph="🤖" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="chatbox-ellipses-outline" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
           title: 'Lịch sử',
-          tabBarIcon: ({ color }) => <TabIcon glyph="🛠" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="document-text-outline" size={20} color={color} />,
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
           title: 'Tài khoản',
-          tabBarIcon: ({ color }) => <TabIcon glyph="👤" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={20} color={color} />,
         }}
       />
     </Tabs>
   );
 }
+

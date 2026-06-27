@@ -9,6 +9,10 @@ export default function CarDetailsPage() {
   const params = useParams();
   const [car, setCar] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  
+  // AI states
+  const [recData, setRecData] = useState(null);
+  const [recLoading, setRecLoading] = useState(true);
 
   const printRef = useRef();
   const handlePrint = useReactToPrint({
@@ -19,6 +23,14 @@ export default function CarDetailsPage() {
     fetch(`/api/cars/${params.id}`)
       .then(res => res.json())
       .then(data => setCar(data));
+
+    fetch(`/api/ai/recommend-maintenance?carId=${params.id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setRecData(data);
+      })
+      .catch(err => console.error("Error fetching AI recs:", err))
+      .finally(() => setRecLoading(false));
   }, [params.id]);
 
   const onPrintClick = (record) => {
@@ -51,6 +63,115 @@ export default function CarDetailsPage() {
         </div>
       </div>
       
+      {/* AI Smart recommendation */}
+      <div className="card" style={{ marginTop: '2rem', borderLeft: '4px solid var(--primary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div>
+            <h3 style={{ margin: 0, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              🤖 Gợi ý bảo dưỡng định kỳ thông minh (AI)
+            </h3>
+            <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--secondary)' }}>
+              Dựa trên chỉ số ODO thực tế ({car.mileage.toLocaleString('vi-VN')} km) và lịch sử bảo dưỡng tại gara
+            </p>
+          </div>
+          <span style={{ fontSize: '0.75rem', background: 'rgba(59, 130, 246, 0.1)', color: 'var(--primary)', padding: '4px 8px', borderRadius: '12px', fontWeight: 600 }}>
+            Đề xuất thông minh
+          </span>
+        </div>
+
+        {recLoading ? (
+          <div style={{ padding: '1rem 0', color: 'var(--secondary)', fontSize: '0.9rem' }}>Đang phân tích dữ liệu xe bằng AI...</div>
+        ) : recData ? (
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.8fr', gap: '2rem', marginTop: '1rem' }}>
+            {/* AI analysis text column */}
+            <div style={{ background: '#f8fafc', padding: '1.2rem', borderRadius: '8px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                💡 Nhận xét cố vấn AI:
+              </div>
+              <p style={{ margin: 0, fontSize: '0.95rem', color: '#334155', lineHeight: '1.5', fontStyle: 'italic' }}>
+                &ldquo;{recData.aiAnalysis}&rdquo;
+              </p>
+              <div style={{ marginTop: 'auto', display: 'flex', gap: '1rem', borderTop: '1px dashed var(--border)', paddingTop: '0.8rem', fontSize: '0.8rem' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }}></span> Quá hạn
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }}></span> Cần lưu ý
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span> An toàn
+                </span>
+              </div>
+            </div>
+
+            {/* Recommendations progress bar grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem 1.5rem', maxHeight: '350px', overflowY: 'auto', paddingRight: '4px' }}>
+              {recData.recommendations.map((item) => {
+                // Calculate percentage
+                let pct = 100;
+                if (item.lastMileage !== null) {
+                  const used = car.mileage - item.lastMileage;
+                  pct = Math.max(0, Math.min(100, (1 - (used / item.intervalKm)) * 100));
+                } else {
+                  pct = 0; // Chưa bao giờ làm
+                }
+
+                let badgeBg = '#ecfdf5';
+                let badgeColor = '#10b981';
+                let badgeText = 'An toàn';
+                let barBg = '#10b981';
+
+                if (item.status === 'OVERDUE') {
+                  badgeBg = '#fef2f2';
+                  badgeColor = '#ef4444';
+                  badgeText = 'Quá hạn';
+                  barBg = '#ef4444';
+                } else if (item.status === 'WARNING') {
+                  badgeBg = '#fef3c7';
+                  badgeColor = '#d97706';
+                  badgeText = 'Lưu ý';
+                  barBg = '#f59e0b';
+                }
+
+                return (
+                  <div key={item.key} style={{ background: '#ffffff', border: '1px solid var(--border)', padding: '0.8rem', borderRadius: '6px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
+                      <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{item.name}</span>
+                      <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: badgeBg, color: badgeColor, fontWeight: 700 }}>
+                        {badgeText}
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '0.75rem', color: 'var(--secondary)', marginBottom: '0.4rem' }}>
+                      Định kỳ: {item.intervalKm.toLocaleString('vi-VN')} km / {item.intervalMonths} th
+                    </div>
+
+                    {/* Progress bar */}
+                    <div style={{ width: '100%', height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.4rem' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: barBg, borderRadius: '3px', transition: 'width 0.5s ease-in-out' }}></div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                      <span style={{ color: 'var(--secondary)' }}>
+                        {item.lastMileage !== null ? `Đã làm: ${item.lastMileage.toLocaleString('vi-VN')} km` : 'Lần cuối: Chưa rõ'}
+                      </span>
+                      <span style={{ fontWeight: 600, color: item.status === 'OVERDUE' ? '#ef4444' : item.status === 'WARNING' ? '#d97706' : '#10b981' }}>
+                        {item.remainingKm <= 0 
+                          ? `Trễ ${(Math.abs(item.remainingKm)).toLocaleString('vi-VN')} km` 
+                          : `Còn ${item.remainingKm.toLocaleString('vi-VN')} km`
+                        }
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: '1rem 0', color: 'var(--secondary)', fontSize: '0.9rem' }}>Không có dữ liệu phân tích.</div>
+        )}
+      </div>
+
       <div className="card">
         <h3 style={{marginBottom: '1rem', color: 'var(--primary)'}}>Lịch sử sửa chữa, bảo dưỡng</h3>
         <div className="table-container">

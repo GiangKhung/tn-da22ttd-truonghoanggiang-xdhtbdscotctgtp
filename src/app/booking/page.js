@@ -160,8 +160,8 @@ export default function MobileBooking() {
     return (
       <div style={styles.wrapper}>
         <div style={{...styles.container, justifyContent: 'center', alignItems: 'center'}}>
-          <Loader2 className="spin" size={32} color="#2b6cb0" />
-          <p style={{marginTop: '10px', color: '#64748b', fontSize: '0.9rem', fontWeight: '500'}}>Đang xác thực thông tin...</p>
+          <Loader2 className="spin" size={32} color="#c5a880" />
+          <p style={{marginTop: '10px', color: '#a0a0a5', fontSize: '0.9rem', fontWeight: '500'}}>Đang xác thực thông tin...</p>
         </div>
       </div>
     );
@@ -171,9 +171,9 @@ export default function MobileBooking() {
     return (
       <div style={styles.wrapper}>
         <div style={{...styles.container, justifyContent: 'center', alignItems: 'center', padding: '40px 20px', textAlign: 'center'}}>
-          <div style={{...styles.header, width: '100%', borderRadius: '24px', marginBottom: '20px'}}>
+          <div style={{...styles.header, width: '100%', marginBottom: '20px'}}>
             <div style={styles.headerTop}>
-              <Link href="/" style={{color: 'white', opacity: 0.8, textDecoration: 'none'}}>← Gara Trường Phát</Link>
+              <Link href="/" style={{color: '#a0a0a5', opacity: 0.8, textDecoration: 'none'}}>← Gara Trường Phát</Link>
             </div>
             <div style={{marginTop: '1.2rem', paddingBottom: '1rem'}}>
               <h1 style={styles.title}>Đặt lịch 4.0</h1>
@@ -184,19 +184,19 @@ export default function MobileBooking() {
             <div style={{
               width: '80px',
               height: '80px',
-              background: '#eff6ff',
-              borderRadius: '50%',
+              background: 'rgba(197, 168, 128, 0.08)',
+              borderRadius: '4px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#2b6cb0',
+              color: '#c5a880',
               marginBottom: '20px',
-              border: '1px solid #bfdbfe'
+              border: '1px solid rgba(197, 168, 128, 0.25)'
             }}>
-              <Calendar size={36} />
+              <span style={{ fontSize: 24, fontWeight: '800' }}>TP</span>
             </div>
-            <h2 style={{fontWeight: '800', color: '#1e293b', marginBottom: '10px', fontSize: '1.2rem'}}>Yêu cầu Đăng nhập</h2>
-            <p style={{color: '#64748b', fontSize: '0.85rem', lineHeight: '1.6', marginBottom: '30px'}}>
+            <h2 style={{fontWeight: '800', color: '#ffffff', marginBottom: '10px', fontSize: '1.2rem'}}>Yêu cầu Đăng nhập</h2>
+            <p style={{color: '#a0a0a5', fontSize: '0.85rem', lineHeight: '1.6', marginBottom: '30px'}}>
               Hệ thống đặt lịch trực tuyến yêu cầu quý khách đăng nhập tài khoản để đặt lịch và quản lý lịch sử bảo dưỡng xe.
             </p>
             <Link href="/customer/auth?redirect=/booking" style={{
@@ -204,16 +204,15 @@ export default function MobileBooking() {
               width: '100%',
               textAlign: 'center',
               padding: '14px',
-              borderRadius: '14px',
-              background: '#2b6cb0',
-              color: 'white',
+              borderRadius: '4px',
+              background: 'linear-gradient(135deg,#bf953f 0%,#fcf6ba 25%,#b38728 50%,#fbf5b7 75%,#aa771c 100%)',
+              color: '#09090b',
               fontWeight: '800',
-              textDecoration: 'none',
-              boxShadow: '0 4px 12px rgba(43, 108, 176, 0.3)'
+              textDecoration: 'none'
             }}>
               Đăng nhập / Đăng ký ngay
             </Link>
-            <Link href="/" style={{marginTop: '20px', color: '#64748b', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500'}}>
+            <Link href="/" style={{marginTop: '20px', color: '#a0a0a5', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '500'}}>
               ← Quay lại trang chủ
             </Link>
           </div>
@@ -228,7 +227,7 @@ export default function MobileBooking() {
       <div style={styles.container}>
         <div style={styles.header}>
             <div style={styles.headerTop}>
-              <Link href="/" style={{color: 'white', opacity: 0.8, textDecoration: 'none'}}>← Gara Trường Phát</Link>
+              <Link href="/" style={{color: '#a0a0a5', opacity: 0.8, textDecoration: 'none'}}>← Gara Trường Phát</Link>
               <div style={styles.chip}>Mobile Booking</div>
             </div>
             <div style={{marginTop: '1.2rem'}}>
@@ -240,7 +239,7 @@ export default function MobileBooking() {
         {step < 5 && (
           <div style={styles.stepper}>
             {[1, 2, 3, 4].map(s => (
-              <div key={s} style={{...styles.dot, width: step === s ? '35px' : '10px', background: step >= s ? '#2b6cb0' : '#e2e8f0'}} />
+              <div key={s} style={{...styles.dot, width: step === s ? '35px' : '10px', background: step >= s ? '#c5a880' : 'rgba(255, 255, 255, 0.1)'}} />
             ))}
           </div>
         )}
@@ -251,21 +250,21 @@ export default function MobileBooking() {
               <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem'}}>
                 <h2 style={styles.sectionTitle}>Thông tin liên hệ & Xe</h2>
                 <label htmlFor="ai-scan" style={{...styles.aiBtn, opacity: isScanning ? 0.6 : 1}}>
-                  {isScanning ? <Loader2 className="spin" size={16} /> : <Camera size={16} />}
-                  <span>AI Scan</span>
+                  {isScanning && <Loader2 className="spin" size={16} />}
+                  <span>{isScanning ? 'Đang quét...' : 'Quét Cà Vẹt bằng AI'}</span>
                 </label>
               </div>
               <input id="ai-scan" type="file" onChange={handleAIScan} accept="image/*" style={{display: 'none'}} />
               {scanStatus && <div style={styles.statusBox}>{scanStatus}</div>}
               
-              <div style={styles.formGroup}><label style={styles.label}><User size={14}/> Tên khách hàng</label>
+              <div style={styles.formGroup}><label style={styles.label}>Tên khách hàng</label>
                 <input style={styles.input} placeholder="Nguyễn Văn A" value={formData.customerName} onChange={e=>setFormData({...formData, customerName:e.target.value})} /></div>
-              <div style={styles.formGroup}><label style={styles.label}><Phone size={14}/> Số điện thoại</label>
+              <div style={styles.formGroup}><label style={styles.label}>Số điện thoại</label>
                 <input style={styles.input} type="tel" placeholder="09xx..." value={formData.phoneNumber} onChange={e=>setFormData({...formData, phoneNumber:e.target.value})} /></div>
               <div style={styles.row}>
-                <div style={styles.formGroup}><label style={styles.label}><Car size={14}/> Biển số</label>
+                <div style={styles.formGroup}><label style={styles.label}>Biển số xe</label>
                   <input style={styles.input} placeholder="30A-..." value={formData.licensePlate} onChange={e=>setFormData({...formData, licensePlate:e.target.value})} /></div>
-                <div style={styles.formGroup}><label style={styles.label}><Zap size={14}/> Hãng xe</label>
+                <div style={styles.formGroup}><label style={styles.label}>Hãng xe</label>
                   <input style={styles.input} placeholder="Vd: Mazda" value={formData.carBrand} onChange={e=>setFormData({...formData, carBrand:e.target.value})} /></div>
               </div>
             </div>
@@ -277,10 +276,9 @@ export default function MobileBooking() {
               <div style={styles.grid}>
                 {services.map(s => (
                   <div key={s.id} onClick={() => setFormData({...formData, serviceType: s.id})}
-                    style={{...styles.card, borderColor: formData.serviceType === s.id ? '#2b6cb0' : '#f1f5f9', background: formData.serviceType === s.id ? '#eff6ff' : 'white'}}>
-                    <div style={{...styles.iconWrap, background: formData.serviceType === s.id ? '#2b6cb0' : '#f1f5f9', color: formData.serviceType === s.id ? 'white' : '#2b6cb0'}}>{s.icon}</div>
-                    <div style={{fontWeight: '700', fontSize: '0.85rem'}}>{s.name}</div>
-                    <div style={{fontSize: '0.8rem', color: '#2b6cb0', fontWeight: 'bold'}}>{s.price}</div>
+                    style={{...styles.card, borderColor: formData.serviceType === s.id ? '#c5a880' : 'rgba(197, 168, 128, 0.15)', background: formData.serviceType === s.id ? 'rgba(197, 168, 128, 0.08)' : '#18181c'}}>
+                    <div style={{fontWeight: '700', fontSize: '0.9rem', color: '#ffffff'}}>{s.name}</div>
+                    <div style={{fontSize: '0.8rem', color: '#c5a880', fontWeight: 'bold', marginTop: '6px'}}>{s.price}</div>
                   </div>
                 ))}
               </div>
@@ -290,35 +288,35 @@ export default function MobileBooking() {
           {step === 3 && (
             <div className="animate-fade-in">
               <h2 style={styles.sectionTitle}>Thời gian hẹn</h2>
-              <div style={styles.formGroup}><label style={styles.label}><Calendar size={14}/> Ngày hẹn</label>
+              <div style={styles.formGroup}><label style={styles.label}>Ngày hẹn</label>
                 <input style={styles.input} type="date" value={formData.appointmentDate} onChange={e=>setFormData({...formData, appointmentDate:e.target.value})} /></div>
-              <div style={{marginTop: '1.2rem'}}><label style={styles.label}><Clock size={14}/> Giờ còn trống (Tối đa 10 xe/giờ)</label>
+              <div style={{marginTop: '1.2rem'}}><label style={styles.label}>Giờ còn trống (Tối đa 10 xe/giờ)</label>
                 <div style={styles.timeGrid}>
-                  {timeSlots.map(t => {
-                    const hour = parseInt(t.split(':')[0]);
-                    const count = occupancy[hour] || 0;
-                    const isFull = count >= 10;
-                    
-                    const d = new Date();
-                    const localToday = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                    const currentHour = d.getHours();
-                    const isToday = formData.appointmentDate === localToday;
-                    const isPast = isToday && hour <= currentHour;
-                    const isDisabled = isFull || isPast;
+                   {timeSlots.map(t => {
+                     const hour = parseInt(t.split(':')[0]);
+                     const count = occupancy[hour] || 0;
+                     const isFull = count >= 10;
+                     
+                     const d = new Date();
+                     const localToday = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                     const currentHour = d.getHours();
+                     const isToday = formData.appointmentDate === localToday;
+                     const isPast = isToday && hour <= currentHour;
+                     const isDisabled = isFull || isPast;
 
-                    return (
-                      <div key={t} onClick={() => !isDisabled && setFormData({...formData, appointmentTime: t})}
-                        style={{...styles.timeChip, 
-                          opacity: isDisabled ? 0.5 : 1,
-                          background: isDisabled ? (isPast ? '#f1f5f9' : '#fee2e2') : (formData.appointmentTime === t ? '#2b6cb0' : 'white'),
-                          color: isDisabled ? (isPast ? '#94a3b8' : '#ef4444') : (formData.appointmentTime === t ? 'white' : '#1e3a8a'),
-                          borderColor: isDisabled ? (isPast ? '#cbd5e1' : '#fecaca') : (formData.appointmentTime === t ? '#2b6cb0' : '#e2e8f0'),
-                          cursor: isDisabled ? 'not-allowed' : 'pointer'
-                        }}>
-                        {t} {isPast ? '(Qua)' : (isFull ? '(Hết)' : `(${count}/10)`)}
-                      </div>
-                    );
-                  })}
+                     return (
+                       <div key={t} onClick={() => !isDisabled && setFormData({...formData, appointmentTime: t})}
+                         style={{...styles.timeChip, 
+                           opacity: isDisabled ? 0.5 : 1,
+                           background: isDisabled ? (isPast ? 'rgba(255,255,255,0.02)' : 'rgba(239, 68, 68, 0.1)') : (formData.appointmentTime === t ? 'rgba(197, 168, 128, 0.15)' : '#18181c'),
+                           color: isDisabled ? (isPast ? '#64748b' : '#f87171') : (formData.appointmentTime === t ? '#c5a880' : '#ffffff'),
+                           borderColor: isDisabled ? (isPast ? 'rgba(255,255,255,0.05)' : 'rgba(239, 68, 68, 0.25)') : (formData.appointmentTime === t ? '#c5a880' : 'rgba(197, 168, 128, 0.15)'),
+                           cursor: isDisabled ? 'not-allowed' : 'pointer'
+                         }}>
+                         {t} {isPast ? '(Qua)' : (isFull ? '(Hết)' : `(${count}/10)`)}
+                       </div>
+                     );
+                   })}
                 </div>
               </div>
             </div>
@@ -341,7 +339,7 @@ export default function MobileBooking() {
           {step === 5 && (
             <div style={styles.success}>
               <div style={styles.checkWrap}>✓</div>
-              <h2 style={{fontWeight: '800'}}>ĐẶT LỊCH THÀNH CÔNG!</h2>
+              <h2 style={{fontWeight: '800', color: '#ffffff'}}>ĐẶT LỊCH THÀNH CÔNG!</h2>
               <button onClick={()=>window.location.href='/'} style={styles.nextBtn}>Về trang chủ</button>
             </div>
           )}
@@ -364,32 +362,32 @@ export default function MobileBooking() {
 }
 
 const styles = {
-  wrapper: { backgroundColor: '#f1f5f9', minHeight: '100vh', display: 'flex', justifyContent: 'center' },
-  container: { width: '100%', maxWidth: '440px', minHeight: '100vh', backgroundColor: 'white', position: 'relative', display: 'flex', flexDirection: 'column', boxShadow: '0 0 20px rgba(0,0,0,0.1)' },
-  header: { padding: '30px 20px', background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)', color: 'white', borderRadius: '0 0 32px 32px' },
-  headerTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem' },
-  chip: { background: 'rgba(255,255,255,0.2)', padding: '4px 10px', borderRadius: '20px' },
-  title: { fontSize: '1.6rem', fontWeight: '800', margin: '8px 0 4px' },
-  subtitle: { fontSize: '0.8rem', opacity: 0.8 },
+  wrapper: { backgroundColor: '#09090b', minHeight: '100vh', display: 'flex', justifyContent: 'center' },
+  container: { width: '100%', maxWidth: '440px', minHeight: '100vh', backgroundColor: '#121214', position: 'relative', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', borderLeft: '1px solid rgba(197, 168, 128, 0.15)', borderRight: '1px solid rgba(197, 168, 128, 0.15)' },
+  header: { padding: '30px 20px', background: 'linear-gradient(135deg, #18181c 0%, #121214 100%)', color: 'white', borderBottom: '1px solid rgba(197, 168, 128, 0.15)' },
+  headerTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem', color: '#a0a0a5' },
+  chip: { background: 'rgba(197, 168, 128, 0.08)', padding: '4px 10px', borderRadius: '4px', border: '1px solid rgba(197, 168, 128, 0.25)', color: '#c5a880', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '0.7rem' },
+  title: { fontSize: '1.6rem', fontWeight: '800', margin: '8px 0 4px', color: '#ffffff', letterSpacing: '0.03em' },
+  subtitle: { fontSize: '0.8rem', color: '#a0a0a5' },
   stepper: { display: 'flex', gap: '6px', padding: '15px 20px', justifyContent: 'center' },
   dot: { height: '6px', borderRadius: '3px', transition: 'all 0.3s' },
   main: { padding: '10px 20px', flex: 1, paddingBottom: '120px' },
-  sectionTitle: { fontSize: '1.1rem', fontWeight: '800', color: '#1e293b' },
-  aiBtn: { display: 'flex', alignItems: 'center', gap: '6px', background: '#eff6ff', color: '#2b6cb0', padding: '6px 12px', borderRadius: '10px', border: '1px solid #bfdbfe', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' },
-  statusBox: { color: '#2b6cb0', fontWeight: '700', fontSize: '0.75rem', marginBottom: '1rem', background: '#eff6ff', padding: '8px', borderRadius: '8px', textAlign: 'center' },
+  sectionTitle: { fontSize: '1.1rem', fontWeight: '800', color: '#ffffff', letterSpacing: '0.03em', textTransform: 'uppercase', borderBottom: '1px solid rgba(197, 168, 128, 0.1)', paddingBottom: '8px', marginBottom: '16px' },
+  aiBtn: { display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(197, 168, 128, 0.08)', color: '#c5a880', padding: '6px 12px', borderRadius: '4px', border: '1px solid rgba(197, 168, 128, 0.25)', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' },
+  statusBox: { color: '#c5a880', fontWeight: '700', fontSize: '0.75rem', marginBottom: '1rem', background: 'rgba(197, 168, 128, 0.08)', padding: '8px', borderRadius: '4px', border: '1px solid rgba(197, 168, 128, 0.15)', textAlign: 'center' },
   formGroup: { marginBottom: '1rem' },
-  label: { display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: '700', color: '#64748b', marginBottom: '4px' },
-  input: { width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '1rem', outline: 'none', background: '#f8fafc', fontWeight: '500' },
+  label: { display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', fontWeight: '700', color: '#a0a0a5', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.03em' },
+  input: { width: '100%', padding: '12px', borderRadius: '4px', border: '1.5px solid rgba(197, 168, 128, 0.25)', fontSize: '1rem', outline: 'none', background: '#18181c', color: '#ffffff', fontWeight: '500', transition: 'all 0.2s' },
   row: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' },
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' },
-  card: { padding: '12px', borderRadius: '16px', border: '2px solid', textAlign: 'center', cursor: 'pointer' },
-  iconWrap: { width: '38px', height: '38px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px' },
+  card: { padding: '16px 12px', borderRadius: '4px', border: '1.5px solid', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' },
+  iconWrap: { width: '38px', height: '38px', borderRadius: '4px', display: 'none', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px' },
   timeGrid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' },
-  timeChip: { padding: '10px', borderRadius: '12px', border: '1px solid', textAlign: 'center', fontSize: '0.8rem', fontWeight: '700' },
-  reviewCard: { background: '#f8fafc', padding: '15px', borderRadius: '16px', marginBottom: '12px', fontSize: '0.85rem', lineHeight: '1.6', border: '1px solid #e2e8f0' },
+  timeChip: { padding: '10px', borderRadius: '4px', border: '1.5px solid', textAlign: 'center', fontSize: '0.8rem', fontWeight: '700', transition: 'all 0.2s' },
+  reviewCard: { background: '#18181c', padding: '15px', borderRadius: '4px', marginBottom: '12px', fontSize: '0.85rem', lineHeight: '1.6', border: '1px solid rgba(197, 168, 128, 0.15)', color: '#ffffff' },
   success: { display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '40px' },
-  checkWrap: { width: '70px', height: '70px', background: '#10b981', color: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '1.5rem' },
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px 20px 30px', background: 'white', borderTop: '1px solid #f1f5f9' },
-  backBtn: { padding: '14px 20px', borderRadius: '14px', background: '#f1f5f9', color: '#444', border: 'none', fontWeight: '600' },
-  nextBtn: { padding: '14px', borderRadius: '14px', background: '#2b6cb0', color: 'white', fontWeight: '800', border: 'none' }
+  checkWrap: { width: '70px', height: '70px', background: '#c5a880', color: '#09090b', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', marginBottom: '1.5rem', fontWeight: '800' },
+  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px 20px 30px', background: '#121214', borderTop: '1px solid rgba(197, 168, 128, 0.15)' },
+  backBtn: { padding: '14px 20px', borderRadius: '4px', background: 'rgba(255, 255, 255, 0.05)', color: '#c5a880', border: '1px solid rgba(197, 168, 128, 0.25)', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' },
+  nextBtn: { padding: '14px', borderRadius: '4px', background: 'linear-gradient(135deg,#bf953f 0%,#fcf6ba 25%,#b38728 50%,#fbf5b7 75%,#aa771c 100%)', color: '#09090b', fontWeight: '800', border: 'none', cursor: 'pointer', transition: 'opacity 0.2s' }
 };

@@ -267,22 +267,22 @@ export default function AppointmentsPage() {
                 <div 
                   key={slot}
                   style={{
-                    background: isFull ? 'rgba(254, 226, 226, 0.4)' : hasBookings ? 'rgba(239, 246, 255, 0.4)' : 'transparent',
-                    border: isFull ? '2px solid #fca5a5' : hasBookings ? '2px solid #93c5fd' : '2px dashed var(--border)',
+                    background: isFull ? 'rgba(244, 63, 94, 0.08)' : hasBookings ? 'rgba(16, 185, 129, 0.04)' : 'transparent',
+                    border: isFull ? '2px solid rgba(244, 63, 94, 0.3)' : hasBookings ? '2px solid rgba(16, 185, 129, 0.25)' : '2px dashed var(--border)',
                     borderRadius: '16px',
                     padding: '1.25rem',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.75rem',
                     transition: 'all 0.2s ease',
-                    boxShadow: hasBookings ? '0 4px 6px -1px rgba(0, 0, 0, 0.05)' : 'none'
+                    boxShadow: hasBookings ? '0 4px 12px rgba(16, 185, 129, 0.05)' : 'none'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ 
                       fontSize: '1.05rem', 
                       fontWeight: '700', 
-                      color: isFull ? '#dc2626' : hasBookings ? 'var(--primary)' : 'var(--secondary)' 
+                      color: isFull ? '#fda4af' : hasBookings ? 'var(--primary-glow)' : 'var(--secondary)' 
                     }}>
                       🕒 {slot}
                     </span>
@@ -291,8 +291,8 @@ export default function AppointmentsPage() {
                       fontWeight: '600', 
                       padding: '0.25rem 0.5rem', 
                       borderRadius: '12px',
-                      background: isFull ? '#fee2e2' : hasBookings ? '#dbeafe' : 'var(--background)',
-                      color: isFull ? '#ef4444' : hasBookings ? 'var(--primary)' : 'var(--secondary)'
+                      background: isFull ? 'rgba(244, 63, 94, 0.15)' : hasBookings ? 'rgba(16, 185, 129, 0.15)' : 'var(--background)',
+                      color: isFull ? '#fda4af' : hasBookings ? 'var(--primary-glow)' : 'var(--secondary)'
                     }}>
                       {slotCount}/10 xe
                     </span>
@@ -337,8 +337,9 @@ export default function AppointmentsPage() {
                                 borderRadius: '8px',
                                 fontSize: '0.65rem',
                                 fontWeight: '600',
-                                background: appt.status === 'PENDING' ? '#f1f5f9' : appt.status === 'CANCELLED' ? '#fee2e2' : '#dcfce7',
-                                color: appt.status === 'PENDING' ? '#475569' : appt.status === 'CANCELLED' ? '#ef4444' : '#10b981'
+                                background: appt.status === 'PENDING' ? 'rgba(255, 255, 255, 0.05)' : appt.status === 'CANCELLED' ? 'rgba(244, 63, 94, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                                color: appt.status === 'PENDING' ? '#94a3b8' : appt.status === 'CANCELLED' ? '#fb7185' : '#34d399',
+                                border: appt.status === 'PENDING' ? '1px solid rgba(255, 255, 255, 0.1)' : appt.status === 'CANCELLED' ? '1px solid rgba(244, 63, 94, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)'
                               }}>
                                 {appt.status === 'PENDING' ? 'Chờ duyệt' : appt.status === 'CANCELLED' ? 'Đã hủy' : 'Đã xác nhận'}
                               </span>
@@ -418,8 +419,8 @@ export default function AppointmentsPage() {
                 onClick={() => record ? window.location.href = `/maintenance/${record.id}` : null}
                 style={{
                   aspectRatio: '1/1',
-                  backgroundColor: record ? '#ebf8ff' : '#f8fafc',
-                  border: record ? '2px solid var(--primary)' : '2px dashed var(--border)',
+                  backgroundColor: record ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                  border: record ? '2px solid var(--primary)' : '2px dashed rgba(255, 255, 255, 0.1)',
                   borderRadius: '16px',
                   display: 'flex',
                   flexDirection: 'column',
@@ -427,11 +428,19 @@ export default function AppointmentsPage() {
                   alignItems: 'center',
                   cursor: record ? 'pointer' : 'default',
                   transition: 'all 0.2s ease',
-                  color: record ? 'var(--primary)' : 'var(--secondary)',
-                  boxShadow: record ? '0 4px 12px rgba(43, 108, 176, 0.15)' : 'none'
+                  color: record ? 'var(--primary-glow)' : 'var(--text-muted)',
+                  boxShadow: record ? '0 4px 12px rgba(16, 185, 129, 0.2)' : 'none'
                 }}
-                onMouseEnter={e => { if(record) { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 16px rgba(43, 108, 176, 0.2)'; } }}
-                onMouseLeave={e => { if(record) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(43, 108, 176, 0.15)'; } }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = record ? '0 8px 20px rgba(0, 255, 136, 0.3)' : '0 4px 12px rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.borderColor = record ? 'var(--primary-glow)' : 'rgba(0, 255, 136, 0.3)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = record ? '0 4px 12px rgba(16, 185, 129, 0.2)' : 'none';
+                  e.currentTarget.style.borderColor = record ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)';
+                }}
               >
                 {record ? (
                    <>
@@ -448,8 +457,8 @@ export default function AppointmentsPage() {
           })}
         </div>
         
-        <div style={{ width: '200px', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', background: '#f8fafc', borderRadius: '16px', border: '1px solid var(--border)' }}>
-           <div style={{ fontWeight: '600', color: 'var(--secondary)', fontSize: '0.9rem', marginBottom: '-0.5rem' }}>Chọn ngày xem:</div>
+        <div style={{ width: '200px', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid var(--border)' }}>
+           <div style={{ fontWeight: '600', color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '-0.5rem' }}>Chọn ngày xem:</div>
            <input 
               type="date" 
               value={boardDate} 
