@@ -84,14 +84,14 @@ export default function CarDetailsPage() {
         ) : recData ? (
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.8fr', gap: '2rem', marginTop: '1rem' }}>
             {/* AI analysis text column */}
-            <div style={{ background: '#f8fafc', padding: '1.2rem', borderRadius: '8px', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+            <div style={{ background: 'var(--background)', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.15)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
               <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 💡 Nhận xét cố vấn AI:
               </div>
-              <p style={{ margin: 0, fontSize: '0.95rem', color: '#334155', lineHeight: '1.5', fontStyle: 'italic' }}>
+              <p style={{ margin: 0, fontSize: '0.95rem', color: '#cbd5e1', lineHeight: '1.5', fontStyle: 'italic' }}>
                 &ldquo;{recData.aiAnalysis}&rdquo;
               </p>
-              <div style={{ marginTop: 'auto', display: 'flex', gap: '1rem', borderTop: '1px dashed var(--border)', paddingTop: '0.8rem', fontSize: '0.8rem' }}>
+              <div style={{ marginTop: 'auto', display: 'flex', gap: '1rem', borderTop: '1px dashed rgba(16, 185, 129, 0.15)', paddingTop: '0.8rem', fontSize: '0.8rem' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }}></span> Quá hạn
                 </span>
@@ -116,46 +116,46 @@ export default function CarDetailsPage() {
                   pct = 0; // Chưa bao giờ làm
                 }
 
-                let badgeBg = '#ecfdf5';
+                let badgeBg = 'rgba(16, 185, 129, 0.15)';
                 let badgeColor = '#10b981';
                 let badgeText = 'An toàn';
                 let barBg = '#10b981';
 
                 if (item.status === 'OVERDUE') {
-                  badgeBg = '#fef2f2';
+                  badgeBg = 'rgba(239, 68, 68, 0.15)';
                   badgeColor = '#ef4444';
                   badgeText = 'Quá hạn';
                   barBg = '#ef4444';
                 } else if (item.status === 'WARNING') {
-                  badgeBg = '#fef3c7';
-                  badgeColor = '#d97706';
+                  badgeBg = 'rgba(245, 158, 11, 0.15)';
+                  badgeColor = '#f59e0b';
                   badgeText = 'Lưu ý';
                   barBg = '#f59e0b';
                 }
 
                 return (
-                  <div key={item.key} style={{ background: '#ffffff', border: '1px solid var(--border)', padding: '0.8rem', borderRadius: '6px' }}>
+                  <div key={item.key} style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border)', padding: '0.8rem', borderRadius: '6px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
-                      <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{item.name}</span>
+                      <span style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)' }}>{item.name}</span>
                       <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '4px', background: badgeBg, color: badgeColor, fontWeight: 700 }}>
                         {badgeText}
                       </span>
                     </div>
 
-                    <div style={{ fontSize: '0.75rem', color: 'var(--secondary)', marginBottom: '0.4rem' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
                       Định kỳ: {item.intervalKm.toLocaleString('vi-VN')} km / {item.intervalMonths} th
                     </div>
 
                     {/* Progress bar */}
-                    <div style={{ width: '100%', height: '6px', background: '#f1f5f9', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.4rem' }}>
+                    <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '0.4rem' }}>
                       <div style={{ width: `${pct}%`, height: '100%', background: barBg, borderRadius: '3px', transition: 'width 0.5s ease-in-out' }}></div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
-                      <span style={{ color: 'var(--secondary)' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>
                         {item.lastMileage !== null ? `Đã làm: ${item.lastMileage.toLocaleString('vi-VN')} km` : 'Lần cuối: Chưa rõ'}
                       </span>
-                      <span style={{ fontWeight: 600, color: item.status === 'OVERDUE' ? '#ef4444' : item.status === 'WARNING' ? '#d97706' : '#10b981' }}>
+                      <span style={{ fontWeight: 600, color: item.status === 'OVERDUE' ? '#ef4444' : item.status === 'WARNING' ? '#f59e0b' : '#10b981' }}>
                         {item.remainingKm <= 0 
                           ? `Trễ ${(Math.abs(item.remainingKm)).toLocaleString('vi-VN')} km` 
                           : `Còn ${item.remainingKm.toLocaleString('vi-VN')} km`
