@@ -49,7 +49,7 @@ RUN mkdir -p /app/public/uploads /app/db
 EXPOSE 3000
 
 # Lệnh khởi chạy: 
-# 1. Chạy các file migrations để cập nhật cấu trúc database mới nhất
+# 1. Đồng bộ cấu trúc database mới nhất từ schema.prisma trực tiếp vào SQLite (db push)
 # 2. Chạy seed để khởi tạo tài khoản admin và tech nếu chưa có
 # 3. Khởi động ứng dụng Next.js ở chế độ production
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && npm start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npx prisma db seed && npm start"]

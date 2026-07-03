@@ -1,0 +1,37 @@
+# Bỏ qua thư mục node_modules cục bộ (Docker sẽ tự cài đặt lại bên trong container)
+node_modules
+**/node_modules
+
+# Bỏ qua các file build và cache cục bộ
+.next
+out
+.expo
+.vscode
+
+# Bỏ qua phân hệ di động (không cần thiết để build web server)
+mobile
+
+# Bỏ qua cơ sở dữ liệu SQLite cục bộ và file cấu hình chứa mật khẩu
+.env
+.env.local
+*.db
+*.db-journal
+
+# Bỏ qua Git và các file tài liệu đồ án, báo cáo
+.git
+.gitignore
+.agents
+AGENTS.md
+CLAUDE.md
+*.docx
+*.pdf
+*.pptx
+poster.html
+slides.html
+
+# Bỏ qua log và file hệ thống
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
